@@ -1,0 +1,46 @@
+{
+  "advocates": [
+    {
+      "name": "John Doe",
+      "status": "Active",
+      "photo": "img/avatars/1.png",
+      "id": "app-user-view-account.html"
+    },
+    {
+      "name": "Micheal Clarke",
+      "subtitle": "Active",
+      "src": "img/avatars/2.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Melina Gibson",
+      "subtitle": "Suspended",
+      "src": "img/avatars/5.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Anna Strong",
+      "subtitle": "Suspended",
+      "src": "img/avatars/7.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Stephanie Gould",
+      "subtitle": "Deceased",
+      "src": "img/avatars/3.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "David Budd",
+      "subtitle": "Struck Off",
+      "src": "img/avatars/10.png",
+      "url": "app-user-view-account.html"
+    },
+    {
+      "name": "Mark Shepiro",
+      "subtitle": "Struck Off",
+      "src": "img/avatars/12.png",
+      "url": "app-user-view-account.html"
+    }
+  ]
+}
