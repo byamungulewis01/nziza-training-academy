@@ -33,7 +33,7 @@ class InvoiceEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invoice Email',
+            subject: $this->subject,
         );
     }
 
