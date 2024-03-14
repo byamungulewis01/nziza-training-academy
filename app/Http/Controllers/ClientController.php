@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Course;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
-class CourseController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $courses = Course::orderByDesc('id')->get();
-        return view('course.index', compact('courses'));
-        //
+        $clients = Client::orderByDesc('id')->get();
+        return view('clients.index', compact('clients'));
     }
 
     /**
@@ -31,13 +30,14 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:courses,name',
-            'price' => 'required|numeric',
-            'timing' => 'required|numeric',
+            'name' => 'required|unique:clients,name',
+            'email' => 'required|email|unique:clients,email',
+            'phone' => 'required|unique:clients,phone',
+            'address' => 'required|string',
         ]);
         try {
-            Course::create($request->all());
-            return back()->with('message', 'Course Added Succesfully');
+            Client::create($request->all());
+            return back()->with('message', 'Client Added Succesfully');
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with('error', $th->getMessage());
@@ -66,13 +66,14 @@ class CourseController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|unique:courses,name,' . $id,
-            'price' => 'required|numeric',
-            'timing' => 'required|numeric',
+            'name' => 'required|unique:clients,name,' . $id,
+            'email' => 'required|email|unique:clients,email,' . $id,
+            'phone' => 'required|unique:clients,phone,' . $id,
+            'address' => 'required|string',
         ]);
         try {
-            Course::findorfail($id)->update($request->all());
-            return back()->with('message', 'Course Updated Succesfully');
+            Client::findorfail($id)->update($request->all());
+            return back()->with('message', 'Client Updated Succesfully');
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with('error', $th->getMessage());
@@ -85,8 +86,8 @@ class CourseController extends Controller
     public function destroy(string $id)
     {
         try {
-            Course::findorfail($id)->delete();
-            return back()->with('message', 'Course Added Succesfully');
+            Client::findorfail($id)->delete();
+            return back()->with('message', 'Client Added Succesfully');
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with('error', $th->getMessage());

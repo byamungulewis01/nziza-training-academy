@@ -17,10 +17,10 @@ return new class extends Migration {
             $table->string('phone');
             $table->string('company_name');
             $table->string('position')->nullable();
-            $table->string('trainings')->nullable();
-            $table->string('trainee_number')->nullable();
+            $table->string('training')->nullable();
+            $table->string('training_qty')->nullable();
             $table->string('licence')->nullable();
-            $table->string('licence_number')->nullable();
+            $table->string('licence_qty')->nullable();
             $table->longText('comments')->nullable();
             $table->timestamps();
         });

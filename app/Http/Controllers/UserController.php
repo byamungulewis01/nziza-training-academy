@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Mail\NewUser;
 use App\Models\Branch;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -45,17 +48,17 @@ class UserController extends Controller
         if ($request->hasFile('image')) {
             $profile = $request->file('image')->store('profile');
         }
+        $password = Str::random(6);
         $request->merge([
             'profile' => $profile,
-            'password' => 'password'
+            'password' => $password,
         ]);
         try {
             User::create($request->all());
+            Mail::to($request->email)->send(new NewUser($request->dumpemail, $password));
             return back()->with('success', 'Employee Added Succesfully');
         } catch (\Throwable $th) {
-            //throw $th;
-            // dd($th->getMessage());
-            return back()->with('error', $th->getMessage());
+            return back()->with('error', "Email Not Sent ". $th->getMessage());
         }
     }
 
@@ -84,8 +87,8 @@ class UserController extends Controller
         $profile = $user->profile;
         $request->validate([
             'name' => 'required|string|min:5',
-            'email' => 'required|email|unique:users,email,'.$id,
-            'phone' => 'required|numeric|unique:users,phone,'.$id,
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'required|numeric|unique:users,phone,' . $id,
             'image' => 'nullable|mimes:png,jpg,jpeg,svg,gif|max:100000',
             'position' => 'required',
             'status' => 'required',
@@ -98,7 +101,7 @@ class UserController extends Controller
         }
         $request->merge([
             'profile' => $profile,
-            'password' => 'password'
+            'password' => 'password',
         ]);
         try {
             User::create($request->all());

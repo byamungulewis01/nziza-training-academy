@@ -7,7 +7,7 @@
             <div class="col-lg-9 col-12 mb-lg-0 mb-4">
                 <div class="card invoice-preview-card">
                     <div class="card-body">
-                        <form action="{{ route('invoice.store') }}" method="post">
+                        <form action="{{ route('storeQuote') }}" method="post">
                             @csrf
                             @if (session()->has('warning1'))
                                 <div class="alert alert-warning d-flex align-items-center" role="alert">
@@ -17,62 +17,46 @@
                                     {{ session()->get('warning1') }}
                                 </div>
                             @endif
-                            <div class="row m-sm-4 m-0">
-                                <div class="col-md-7 mb-md-0 mb-4 ps-0">
-                                    <div class="d-flex svg-illustration mb-4 gap-2 align-items-center">
-                                        <img src="{{ asset('assets/logo/logo.png') }}" class="mt-1" alt="Nziza Logo"
-                                            width="170">
-                                    </div>
-                                    <p class="mb-2">Kigali, Rwanda KICUKIRO, KK 15 RD</p>
-                                    <p class="mb-2">Hotline: +25078556718</p>
-                                    <p class="mb-2">Website: <a
-                                            href="https://nzizatraining.ac.rw">https://nzizatraining.ac.rw</a></p>
-                                    <p class="mb-2">Email: sales@nzizatraining.ac.rw</p>
+                            <h4>Create Quotation</h4>
+                            <div class="row m-sm-4 m-2">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fs-6" for="fname">First Name <span
+                                            class="text-danger">*</span></label>
+                                    <input required type="text" name="fname" value="{{ old('fname') }}"
+                                        class="form-control" id="fname" placeholder="First Name" />
                                 </div>
-                                <div class="col-md-5">
-                                    <dl class="row mb-2">
-                                        <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
-                                            <span class="h4 text-capitalize mb-0 text-nowrap">Invoice</span>
-                                        </dt>
-                                        <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
-                                            <div class="input-group input-group-merge disabled w-px-150">
-                                                <span class="input-group-text">#</span>
-                                                @php
-                                                    $invoice_no =
-                                                        now()->year .
-                                                        'NGR' .
-                                                        str_pad(
-                                                            \App\Models\Invoice::where('branch', 'rwanda')->count() + 1,
-                                                            3,
-                                                            '0',
-                                                            STR_PAD_LEFT,
-                                                        );
-                                                @endphp
-                                                <input type="text" class="form-control" disabled=""
-                                                    placeholder="{{ $invoice_no }}" value="{{ $invoice_no }}"
-                                                    id="invoiceId">
-                                                <input type="hidden" class="form-control"name="invoice_no"
-                                                    value="{{ $invoice_no }}">
-                                                <input type="hidden" class="form-control"name="branch" value="rwanda">
-                                            </div>
-                                        </dd>
-                                        <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
-                                            <span class="fw-normal">Valid Date:</span>
-                                        </dt>
-                                        <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
-                                            <input type="text" id="valid_date" name="valid_date" required
-                                                class="form-control w-px-150 date-picker flatpickr-input"
-                                                placeholder="YYYY-MM-DD" readonly="readonly">
-                                        </dd>
-                                        <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
-                                            <span class="fw-normal">Expiry Date:</span>
-                                        </dt>
-                                        <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
-                                            <input type="text" id="expired_date" name="expired_date" required
-                                                class="form-control w-px-150 date-picker flatpickr-input"
-                                                placeholder="YYYY-MM-DD" readonly="readonly">
-                                        </dd>
-                                    </dl>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fs-6" for="lname">Last Name<span
+                                            class="text-danger">*</span></label>
+                                    <input required type="text" id="lname" name="lname"
+                                        value="{{ old('lname') }}" class="form-control" placeholder="Last Name" />
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fs-6" for="company_name">Campany Name<span
+                                            class="text-danger">*</span></label>
+                                    <input required name="company_name" value="{{ old('company_name') }}"
+                                        type="text" class="form-control" id="company_name"
+                                        placeholder="Company Name" />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fs-6" for="position">Position</label>
+                                    <input type="text" class="form-control" name="position"
+                                        value="{{ old('position') }}" placeholder="Position">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fs-6" for="phone">Phone Number<span
+                                            class="text-danger">*</span></label>
+                                    <input required type="text" class="form-control" name="phone"
+                                        value="{{ old('phone') }}" id="phone" placeholder="Phone Number" />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fs-6" for="email">Work Email<span
+                                            class="text-danger">*</span></label>
+                                    <input required type="email" class="form-control"
+                                        placeholder="email@gmail.com" name="email" id="email"
+                                        value="{{ old('email') }}">
                                 </div>
                             </div>
 
@@ -87,9 +71,8 @@
                                 <table id="trainingTable" class="table">
                                     <thead>
                                         <tr>
-                                            <th style="width: 50%">Training Name</th>
+                                            <th style="width: 65%">Training Name</th>
                                             <th>Qty</th>
-                                            <th>Discout (%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -109,9 +92,8 @@
                                 <table id="licenseTable" class="table">
                                     <thead>
                                         <tr>
-                                            <th style="width: 50%">License Name</th>
+                                            <th style="width: 65%">License Name</th>
                                             <th>Qty</th>
-                                            <th>Discout (%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -123,52 +105,21 @@
                             <hr class="my-3 mx-n4">
 
 
-                            <div class="row p-0 p-sm-4">
-                                <div class="col-md-7 mb-md-0 mb-3">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <label for="salesperson" class="form-label me-2 fw-medium"
-                                            style="width: 40%">Client Name:</label>
-                                        <select name="client_id" class="select2 form-select" required id="client_id">
-                                            <option value="" disabled selected>Choose</option>
-                                            @foreach ($clients as $client)
-                                                <option {{ old('client_id') == $client->id ? 'selected' : '' }}
-                                                    value="{{ $client->id }}">{{ $client->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="col-md-5 mb-md-0 mb-3">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <label for="status" class="form-label me-2 fw-medium"
-                                            style="width: 40%">Status:</label>
-                                        <select name="status" class="form-select" required id="status">
-                                            <option value="0" selected>Pending</option>
-                                            <option value="1">Complete</option>
-                                        </select>
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-
                             <hr class="my-3 mx-n4">
 
                             <div class="row px-0 px-sm-4">
                                 <div class="col-12">
                                     <div class="mb-4">
-                                        <label for="note" class="form-label fw-medium">Note:</label>
+                                        <label for="note" class="form-label fw-medium">Comment:</label>
                                         <div id="full-editor" style="height: 200px;max-height: 200px;"></div>
-                                        <input type="hidden" name="notes" id="notes-input">
+                                        <input type="hidden" name="comments" id="notes-input">
                                     </div>
                                 </div>
                             </div>
                             <div class="row px-0 px-sm-4">
                                 <div class="col-12">
                                     <button class="btn btn-primary d-grid mb-2 waves-effect waves-light">
-                                        <span class="d-flex align-items-center justify-content-center text-nowrap">Save
-                                            Invoice</span>
+                                        <span class="d-flex align-items-center justify-content-center text-nowrap">Save</span>
                                     </button>
                                 </div>
                             </div>
@@ -199,59 +150,6 @@
                 $('.select2').select2();
             });
         </script>
-        <script>
-            "use strict";
-            $(function() {
-                var validDateInput = $("#valid_date");
-                var expiredDateInput = $("#expired_date");
-
-                // Function to calculate expiry date based on valid date
-                function calculateExpiryDate(validDate) {
-                    var expiryDate = new Date(validDate);
-                    expiryDate.setDate(expiryDate.getDate() + 21);
-                    return expiryDate;
-                }
-
-                // Set default value for valid_date input
-                var currentDate = new Date();
-                var currentDateString = currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1).toString()
-                    .padStart(2, '0') + "-" + currentDate.getDate().toString().padStart(2, '0');
-                validDateInput.val(currentDateString);
-
-                // Set default value for expired_date input (+3 weeks)
-                var expiryDate = calculateExpiryDate(currentDate);
-                var expiryDateString = expiryDate.getFullYear() + "-" + (expiryDate.getMonth() + 1).toString().padStart(
-                    2, '0') + "-" + expiryDate.getDate().toString().padStart(2, '0');
-                expiredDateInput.val(expiryDateString);
-
-                // Add change event listener to valid_date input
-                validDateInput.change(function() {
-                    // Update expired_date when valid_date is changed
-                    var validDate = $(this).val();
-                    var expiryDate = calculateExpiryDate(validDate);
-                    var expiryDateString = expiryDate.getFullYear() + "-" + (expiryDate.getMonth() + 1)
-                        .toString().padStart(2, '0') + "-" + expiryDate.getDate().toString().padStart(2, '0');
-                    expiredDateInput.val(expiryDateString);
-                });
-
-                // Initialize flatpickr for valid_date
-                validDateInput.flatpickr({
-                    altInput: true,
-                    altFormat: "Y-m-d",
-                    dateFormat: "Y-m-d",
-                    minDate: 'today'
-                });
-
-                // Initialize flatpickr for expired_date
-                expiredDateInput.flatpickr({
-                    altInput: true,
-                    altFormat: "Y-m-d",
-                    dateFormat: "Y-m-d",
-                    minDate: 'today'
-                });
-            });
-        </script>
-
 
         <script src="{{ asset('assets/vendor/libs/quill/katex.js') }}"></script>
         <script src="{{ asset('assets/vendor/libs/quill/quill.js') }}"></script>
@@ -260,7 +158,7 @@
         <script>
             var quill = new Quill("#full-editor", {
                 bounds: "#full-editor",
-                placeholder: "Invoice note ...",
+                placeholder: "Add Comment ...",
                 modules: {
                     formula: !0,
                     toolbar: [
@@ -331,8 +229,6 @@
                     $('#trainingTable tbody').append(
                         `<tr data-id="${trainingId}"><td>${trainingName} <input type="hidden" value="${trainingId}" name="training[]"/></td>
                             <td><input name="training_qty[]" value="1" type="number" id="training_qty" min="1" class="form-control"></td>
-                            <td><input name="training_discount[]" value="0" type="number" id="training_discount" min="0"
-                                                            class="form-control"></td>
                             <td><button type="button" class="btn btn-danger removeBtn"><i class="ti ti-minus ti-xs"></i></button></td>
                             </tr>`
                     );
@@ -374,8 +270,6 @@
                     $('#licenseTable tbody').append(
                         `<tr data-id="${licenseId}"><td>${licenseName} <input type="hidden" value="${licenseId}" name="licence[]"/></td>
                             <td><input name="licence_qty[]" value="1" type="number" id="licence_qty" min="1" class="form-control"></td>
-                            <td><input name="licence_discount[]" value="0" type="number" id="licence_discount" min="0"
-                                                            class="form-control"></td>
                             <td><button type="button" class="btn btn-danger removeBtn2"><i class="ti ti-minus ti-xs"></i></button></td>
                             </tr>`
                     );

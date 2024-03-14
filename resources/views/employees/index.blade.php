@@ -35,8 +35,10 @@
                             <td class="sorting_1">
                                 <div class="d-flex justify-content-start align-items-center user-name">
                                     <div class="avatar-wrapper">
-                                        <div class="avatar me-3"><img src="assets/img/avatars/2.png" alt="Avatar"
-                                                class="rounded-circle"></div>
+                                        <div class="avatar me-3">
+                                            <img src="{{ asset('storage') }}/{{ $item->profile }}" alt="Avatar"
+                                                class="rounded-circle">
+                                            </div>
                                     </div>
                                     <div class="d-flex flex-column"><a href="app-user-view-account.html"
                                             class="text-body text-truncate"><span class="fw-medium">{{ $item->name }}</span></a><small
@@ -131,7 +133,7 @@
                                 <label class="form-label" for="role">Role</label>
                                 <select id="role" name="role" class="form-select">
                                     <option value="" selected> - Select - </option>
-                                    <option @if (old('role') == 'admin') selected @endif value="admin">Admin
+                                    <option @if (old('role') == 'admin') selected @endif value="admin">Manager
                                     </option>
                                     <option @if (old('role') == 'employee') selected @endif value="employee">Employee
                                     </option>

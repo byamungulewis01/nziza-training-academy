@@ -1,4 +1,4 @@
-@section('title', 'Edit Invoice')
+@section('title', 'Invoice Create')
 <x-app-layout>
     <div class="container-xxl flex-grow-1 container-p-y">
 
@@ -7,9 +7,8 @@
             <div class="col-lg-9 col-12 mb-lg-0 mb-4">
                 <div class="card invoice-preview-card">
                     <div class="card-body">
-                        <form action="{{ route('invoice.update', $invoice->id) }}" method="post">
+                        <form action="{{ route('invoice.store') }}" method="post">
                             @csrf
-                            @method('PUT')
                             @if (session()->has('warning1'))
                                 <div class="alert alert-warning d-flex align-items-center" role="alert">
                                     <span class="alert-icon text-warning me-2">
@@ -38,9 +37,23 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
                                             <div class="input-group input-group-merge disabled w-px-150">
                                                 <span class="input-group-text">#</span>
-                                                <input type="text" class="form-control"name="invoice_no"
-                                                    disabled="" placeholder="{{ $invoice->invoice_no }}"
-                                                    value="{{ $invoice->invoice_no }}" id="invoiceId">
+                                                @php
+                                                    $invoice_no =
+                                                        now()->year .
+                                                        'NGR' .
+                                                        str_pad(
+                                                            \App\Models\Invoice::where('branch', 'rwanda')->count() + 1,
+                                                            3,
+                                                            '0',
+                                                            STR_PAD_LEFT,
+                                                        );
+                                                @endphp
+                                                <input type="text" class="form-control" disabled=""
+                                                    placeholder="{{ $invoice_no }}" value="{{ $invoice_no }}"
+                                                    id="invoiceId">
+                                                <input type="hidden" class="form-control"name="invoice_no"
+                                                    value="{{ $invoice_no }}">
+                                                <input type="hidden" class="form-control"name="branch" value="rwanda">
                                             </div>
                                         </dd>
                                         <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
@@ -49,7 +62,7 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
                                             <input type="text" id="valid_date" name="valid_date" required
                                                 class="form-control w-px-150 date-picker flatpickr-input"
-                                                value="{{ $invoice->valid_date }}" readonly="readonly">
+                                                placeholder="YYYY-MM-DD" readonly="readonly">
                                         </dd>
                                         <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end ps-0">
                                             <span class="fw-normal">Expiry Date:</span>
@@ -57,7 +70,7 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end pe-0 ps-0 ps-sm-2">
                                             <input type="text" id="expired_date" name="expired_date" required
                                                 class="form-control w-px-150 date-picker flatpickr-input"
-                                                value="{{ $invoice->expired_date }}" readonly="readonly">
+                                                placeholder="YYYY-MM-DD" readonly="readonly">
                                         </dd>
                                     </dl>
                                 </div>
@@ -67,7 +80,7 @@
                             <div class="row m-sm-4 m-0">
                                 <div class="mb-3">
                                     <label for="trainings" class="form-label fs-6">Select Training:</label>
-                                    <select id="trainings" class="form-select">
+                                    <select id="trainings" class="select2 form-select">
                                         <option value="" selected disabled>Select Training</option>
                                     </select>
                                 </div>
@@ -86,7 +99,6 @@
                                             @php
                                                 $training = explode('_', $invoice->training);
                                                 $trainingsQty = explode('_', $invoice->training_qty);
-                                                $trainingsDiscount = explode('_', $invoice->training_discount);
                                                 $count = count($training);
                                             @endphp
                                             @for ($i = 0; $i < $count; $i++)
@@ -98,14 +110,13 @@
                                                             type="number" id="training_qty" min="1"
                                                             class="form-control"></td>
                                                     <td><input name="training_discount[]"
-                                                            value="{{ $trainingsDiscount[$i] }}" type="number"
+                                                            value="0" type="number"
                                                             id="training_discount" min="0" class="form-control"></td>
                                                     <td><button type="button" class="btn btn-danger removeBtn"><i
                                                                 class="ti ti-minus ti-xs"></i></button></td>
                                                 </tr>
                                             @endfor
                                         @endempty
-                                        <!-- Table body content will be added dynamically -->
                                     </tbody>
                                 </table>
                             </div>
@@ -113,7 +124,7 @@
                             <div class="row m-sm-4 m-0">
                                 <div class="mb-3">
                                     <label for="licenses" class="form-label fs-6">Select License:</label>
-                                    <select id="licenses" class="form-select">
+                                    <select id="licenses" class="select2 form-select">
                                         <option value="" selected disabled>Select License</option>
                                     </select>
                                 </div>
@@ -132,7 +143,6 @@
                                             @php
                                                 $licenses = explode('_', $invoice->licence);
                                                 $licensesQty = explode('_', $invoice->licence_qty);
-                                                $licensesDiscount = explode('_', $invoice->licence_discount);
                                                 $count = count($licenses);
                                             @endphp
                                             @for ($i = 0; $i < $count; $i++)
@@ -144,7 +154,7 @@
                                                             type="number" id="licence_qty" min="1"
                                                             class="form-control"></td>
                                                     <td><input name="licence_discount[]"
-                                                            value="{{ $licensesDiscount[$i] }}" type="number"
+                                                            value="0" type="number"
                                                             id="licence_discount" min="0" class="form-control">
                                                     </td>
                                                     <td><button type="button" class="btn btn-danger removeBtn2"><i
@@ -156,42 +166,41 @@
                                 </table>
                             </div>
                             <hr class="my-3 mx-n4">
+
+
                             <div class="row p-0 p-sm-4">
                                 <div class="col-md-7 mb-md-0 mb-3">
                                     <div class="d-flex align-items-center mb-3">
                                         <label for="salesperson" class="form-label me-2 fw-medium"
                                             style="width: 40%">Client Name:</label>
                                         <select name="client_id" class="select2 form-select" required id="client_id">
+                                            <option value="" disabled selected>Choose</option>
                                             @foreach ($clients as $client)
-                                                <option {{ $invoice->client_id == $client->id ? 'selected' : '' }}
+                                                <option {{ old('client_id') == $client->id ? 'selected' : '' }}
                                                     value="{{ $client->id }}">{{ $client->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+
                                 </div>
                                 <div class="col-md-5 mb-md-0 mb-3">
                                     <div class="d-flex align-items-center mb-3">
                                         <label for="status" class="form-label me-2 fw-medium"
                                             style="width: 40%">Status:</label>
                                         <select name="status" class="form-select" required id="status">
-                                            <option value="0" {{ $invoice->status == 0 ? 'selected' : '' }}>Pending</option>
-                                            <option value="1" {{ $invoice->status == 1 ? 'selected' : '' }}>Complete</option>
+                                            <option value="0" selected>Pending</option>
+                                            <option value="1">Complete</option>
                                         </select>
                                     </div>
-
                                 </div>
-
-
                             </div>
-
                             <hr class="my-3 mx-n4">
 
                             <div class="row px-0 px-sm-4">
                                 <div class="col-12">
                                     <div class="mb-4">
                                         <label for="note" class="form-label fw-medium">Note:</label>
-                                        <div id="full-editor" style="height: 200px;max-height: 200px;">
-                                            {!! $invoice->notes !!}</div>
+                                        <div id="full-editor" style="height: 200px;max-height: 200px;"></div>
                                         <input type="hidden" name="notes" id="notes-input">
                                     </div>
                                 </div>
@@ -234,20 +243,53 @@
         <script>
             "use strict";
             $(function() {
-                var dtt = document.querySelector("#valid_date");
-                dtt && dtt.flatpickr({
-                    altInput: !0,
+                var validDateInput = $("#valid_date");
+                var expiredDateInput = $("#expired_date");
+
+                // Function to calculate expiry date based on valid date
+                function calculateExpiryDate(validDate) {
+                    var expiryDate = new Date(validDate);
+                    expiryDate.setDate(expiryDate.getDate() + 21);
+                    return expiryDate;
+                }
+
+                // Set default value for valid_date input
+                var currentDate = new Date();
+                var currentDateString = currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1).toString()
+                    .padStart(2, '0') + "-" + currentDate.getDate().toString().padStart(2, '0');
+                validDateInput.val(currentDateString);
+
+                // Set default value for expired_date input (+3 weeks)
+                var expiryDate = calculateExpiryDate(currentDate);
+                var expiryDateString = expiryDate.getFullYear() + "-" + (expiryDate.getMonth() + 1).toString().padStart(
+                    2, '0') + "-" + expiryDate.getDate().toString().padStart(2, '0');
+                expiredDateInput.val(expiryDateString);
+
+                // Add change event listener to valid_date input
+                validDateInput.change(function() {
+                    // Update expired_date when valid_date is changed
+                    var validDate = $(this).val();
+                    var expiryDate = calculateExpiryDate(validDate);
+                    var expiryDateString = expiryDate.getFullYear() + "-" + (expiryDate.getMonth() + 1)
+                        .toString().padStart(2, '0') + "-" + expiryDate.getDate().toString().padStart(2, '0');
+                    expiredDateInput.val(expiryDateString);
+                });
+
+                // Initialize flatpickr for valid_date
+                validDateInput.flatpickr({
+                    altInput: true,
                     altFormat: "Y-m-d",
                     dateFormat: "Y-m-d",
-                })
-            });
-            $(function() {
-                var dtt = document.querySelector("#expired_date");
-                dtt && dtt.flatpickr({
-                    altInput: !0,
+                    minDate: 'today'
+                });
+
+                // Initialize flatpickr for expired_date
+                expiredDateInput.flatpickr({
+                    altInput: true,
                     altFormat: "Y-m-d",
                     dateFormat: "Y-m-d",
-                })
+                    minDate: 'today'
+                });
             });
         </script>
 

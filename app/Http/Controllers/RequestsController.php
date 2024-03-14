@@ -4,27 +4,95 @@ namespace App\Http\Controllers;
 
 use App\Models\Career;
 use App\Models\Course;
-use App\Models\Demostration;
 use App\Models\Licence;
 use App\Models\Quotation;
+use App\Models\Demostration;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RequestsController extends Controller
 {
     public function demostration()
     {
         $demostrations = Demostration::orderByDesc('id')->get();
-        return view('requests.demo',compact('demostrations'));
+        return view('requests.demo', compact('demostrations'));
     }
     public function quotation()
     {
         $quotes = Quotation::orderByDesc('id')->get();
-        return view('requests.quote',compact('quotes'));
+        return view('quotation.index', compact('quotes'));
+    }
+    public function create()
+    {
+        return view('quotation.create');
+    }
+    public function edit($id)
+    {
+        $quote = Quotation::findorfail($id);
+        return view('quotation.edit', compact('quote'));
+    }
+    public function download($id)
+    {
+        $invoice = Quotation::findorfail($id);
+        $pdf = Pdf::loadView('quotation.pdf', compact('invoice'))->setPaper('a4', 'landscape');
+        return $pdf->stream(time() . '.pdf');
+        // return view('quotation.pdf',compact('invoice'));
+    }
+    public function show($id)
+    {
+        $invoice = Quotation::findOrFail($id);
+        return view('quotation.show', compact('invoice'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'fname' => 'required|string|min:3',
+            'lname' => 'required|string|min:3',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'position' => 'nullable',
+            'company_name' => 'required',
+        ]);
+
+        $request->merge([
+            'name' => $request->fname . ' ' . $request->lname,
+        ]);
+
+        if ($request->has('training')) {
+
+            $request->merge([
+                'training' => implode('_', $request->training),
+                'training_qty' => implode('_', $request->training_qty),
+            ]);
+        }
+        if ($request->has('licence')) {
+            $request->merge([
+                'licence' => implode('_', $request->licence),
+                'licence_qty' => implode('_', $request->licence_qty),
+            ]);
+        }
+        if ($request->comments != null) {
+            $request->merge(['comments' => $request->comments]);
+        } else {
+            $request->merge(['comments' => Quotation::findOrFail($id)->comments]);
+        }
+        try {
+            Quotation::findOrFail($id)->update($request->all());
+            return back()->with('message', 'Quotation update succesfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+    }
+    public function destroy($id)
+    {
+        Quotation::find($id)->delete();
+        return back()->with('message', 'Quotation Deleted successfully');
     }
     public function careers()
     {
         $careers = Career::orderByDesc('id')->get();
-        return view('requests.job',compact('careers'));
+        return view('requests.job', compact('careers'));
     }
     public function quote()
     {
@@ -34,6 +102,7 @@ class RequestsController extends Controller
     }
     public function storeQuote(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'fname' => 'required|string|min:3',
             'lname' => 'required|string|min:3',
@@ -41,40 +110,30 @@ class RequestsController extends Controller
             'phone' => 'required|numeric',
             'position' => 'nullable',
             'company_name' => 'required',
-            'comment' => 'nullable',
+            'comments' => 'nullable',
         ]);
 
+        $request->merge([
+            'name' => $request->fname . ' ' . $request->lname,
+        ]);
 
         if ($request->has('training')) {
-            $trainings = implode('_', $request->training);
-        } else {
-            $trainings = null;
+
+            $request->merge([
+                'training' => implode('_', $request->training),
+                'training_qty' => implode('_', $request->training_qty),
+            ]);
         }
-
-        $trainee_number = implode('_', $request->trainee_number);
-
         if ($request->has('licence')) {
-            $licence = implode('_', $request->licence);
-        } else {
-            $licence = null;
+            $request->merge([
+                'licence' => implode('_', $request->licence),
+                'licence_qty' => implode('_', $request->licence_qty),
+            ]);
         }
-
-        $licence_number = implode('_', $request->licence_number);
 
         try {
-            Quotation::create([
-                'name' => $request->fname . ' ' . $request->lname,
-                'email' => $request->email,
-                'company_name' => $request->company_name,
-                'comments' => $request->comment,
-                'position' => $request->position,
-                'phone' => $request->phone,
-                'trainings' => $trainings,
-                'trainee_number' => $trainee_number,
-                'licence' => $licence,
-                'licence_number' => $licence_number
-            ]);
-            return back()->with('success', 'Your request sent succesfully');
+            Quotation::create($request->all());
+            return back()->with('message', 'Quotation sent succesfully');
         } catch (\Throwable $th) {
             //throw $th;
             // dd($th->getMessage());

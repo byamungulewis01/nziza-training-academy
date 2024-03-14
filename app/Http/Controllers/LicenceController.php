@@ -12,7 +12,8 @@ class LicenceController extends Controller
      */
     public function index()
     {
-        //
+        $licences = Licence::orderByDesc('id')->get();
+        return view('license.index', compact('licences'));
     }
 
     /**
