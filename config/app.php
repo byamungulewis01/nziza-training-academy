@@ -2,7 +2,14 @@
 
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-
+$app_env = env('APP_ENV');
+if($app_env == 'local'){
+     $app_url = env('APP_URL');
+     $asset_url = null;
+ }else{
+    $app_url = env('APP_URL');
+    $asset_url = $app_url.'/public';
+ }
 return [
 
     /*
@@ -55,9 +62,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', $app_url),
 
-    'asset_url' => env('ASSET_URL'),
+    'asset_url' => env('ASSET_URL', $asset_url),
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +175,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ])->toArray(),
 
     /*

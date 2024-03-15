@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $branches = Branch::all();
-        $employees = User::all();
+        $employees = User::where('role', '!=', 'super_admin')->orderByDesc('id')->get();
         return view('employees.index', compact('branches', 'employees'));
     }
 
@@ -45,9 +45,16 @@ class UserController extends Controller
             'role' => 'required',
             'branch_id' => 'required',
         ]);
+
         if ($request->hasFile('image')) {
-            $profile = $request->file('image')->store('profile');
+            $file = $request->file('image');
+            $filename = $file->getClientOriginalName();
+            $profile = date('His') . '-' . $filename;
+            $file->move(public_path('images/profile'), $profile);
+        } else {
+            $profile = null;
         }
+
         $password = Str::random(6);
         $request->merge([
             'profile' => $profile,
@@ -55,10 +62,10 @@ class UserController extends Controller
         ]);
         try {
             User::create($request->all());
-            Mail::to($request->email)->send(new NewUser($request->dumpemail, $password));
+            Mail::to($request->email)->send(new NewUser($request->email, $password));
             return back()->with('success', 'Employee Added Succesfully');
         } catch (\Throwable $th) {
-            return back()->with('error', "Email Not Sent ". $th->getMessage());
+            return back()->with('error', "Email Not Sent " . $th->getMessage());
         }
     }
 
@@ -83,33 +90,30 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::where('id', $id)->first();
-        $profile = $user->profile;
         $request->validate([
             'name' => 'required|string|min:5',
             'email' => 'required|email|unique:users,email,' . $id,
             'phone' => 'required|numeric|unique:users,phone,' . $id,
-            'image' => 'nullable|mimes:png,jpg,jpeg,svg,gif|max:100000',
+            'image' => 'required|mimes:png,jpg,jpeg,svg,gif|max:100000',
             'position' => 'required',
             'status' => 'required',
             'role' => 'required',
             'branch_id' => 'required',
         ]);
+
         if ($request->hasFile('image')) {
-            Storage::delete($user->profile);
-            $profile = $request->file('image')->store('profile');
+            $file = $request->file('image');
+            $filename = $file->getClientOriginalName();
+            $profile = date('His') . '-' . $filename;
+            $file->move(public_path('images/profile'), $profile);
+            $request->merge(['profile' => $profile]);
         }
-        $request->merge([
-            'profile' => $profile,
-            'password' => 'password',
-        ]);
+
         try {
-            User::create($request->all());
-            return back()->with('success', 'Employee Added Succesfully');
+            User::findOrFail($id)->update($request->all());
+            return back()->with('success', 'Employee Updated Succesfully');
         } catch (\Throwable $th) {
-            //throw $th;
-            // dd($th->getMessage());
-            return back()->with('error', $th->getMessage());
+            return back()->with('error', "Some thing went wrong" . $th->getMessage());
         }
     }
 
@@ -119,5 +123,11 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+        try {
+            User::findOrFail($id)->delete();
+            return back()->with('success', 'Employee Deleted Succesfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', "Some thing went wrong" . $th->getMessage());
+        }
     }
 }

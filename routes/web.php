@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::controller(DairlyReportController::class)->prefix('dairly-report')->name('dairly_report.')->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/', 'report')->name('report');
     });
 
     Route::controller(RequestsController::class)->prefix('request')->name('request.')->group(function () {

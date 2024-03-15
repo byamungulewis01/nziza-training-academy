@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('dairly_reports', function (Blueprint $table) {
             $table->id();
+            $table->text('beforenoon')->nullable();
+            $table->text('afternoon')->nullable();
+            $table->foreignId('reported_by')->constrained('users')->restrictOnDelete();
+            $table->text('comment')->nullable();
+            $table->timestamp('commented_at')->nullable();
+            $table->foreignId('commented_by')->nullable()->constrained('users')->restrictOnDelete();
             $table->timestamps();
         });
     }

@@ -35,7 +35,7 @@
             </li>
             <li class="menu-item">
                 <a href="#" class="menu-link">
-                    <i class="menu-icon tf-icons ti ti-calendar"></i>
+                    <i class="menu-icon tf-icons ti ti-square"></i>
                     <div data-i18n="Request Leave">Request Leave</div>
                 </a>
             </li>

@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -16,14 +15,14 @@ class NewUser extends Mailable
     /**
      * Create a new message instance.
      */
-    public $password;
     public $email;
+    public $password;
 
-    public function __construct($password, $email)
+    public function __construct($email, $password)
     {
         //
-        $this->password = $password;
         $this->email = $email;
+        $this->password = $password;
     }
 
     /**
