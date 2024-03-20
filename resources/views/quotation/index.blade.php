@@ -40,7 +40,7 @@
                                     <div class="d-flex align-items-center"><a href="javascript:;" class="text-body"
                                             data-bs-placement="top" aria-label="Send Mail"
                                             data-bs-original-title="Send Mail" data-bs-toggle="offcanvas"
-                                            data-bs-target="#sendInvoiceOffcanvas{{ $item->id }}"><i
+                                            data-bs-target="#sendQuotationOffcanvas{{ $item->id }}"><i
                                                 class="ti ti-mail mx-2 ti-sm"></i></a>
                                         <a href="{{ route('request.quotation.show', $item->id) }}"
                                             data-bs-toggle="tooltip" class="text-body" data-bs-placement="top"
@@ -92,6 +92,57 @@
                                         </div>
                                     </div>
                                     <!--/ New User Modal -->
+                                    <!-- Send Invoice Sidebar -->
+                                    <div class="offcanvas offcanvas-end" id="sendQuotationOffcanvas{{ $item->id }}" aria-hidden="true">
+                                        <div class="offcanvas-header my-1">
+                                            <h5 class="offcanvas-title">Send Quotation</h5>
+                                            <button type="button" class="btn-close text-reset"
+                                                data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                        </div>
+                                        <div class="offcanvas-body pt-0 flex-grow-1">
+                                            <form
+                                                action="{{ route('request.quotation.send_quotation', $item->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                <div class="mb-3">
+                                                    <label for="invoice-from" class="form-label">From</label>
+                                                    <input type="text" class="form-control" name="from" required
+                                                        id="invoice-from" value="{{ env('MAIL_FROM_ADDRESS') }}"
+                                                        readonly placeholder="company@email.com" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="invoice-to" class="form-label">To</label>
+                                                    <input type="text" class="form-control" name="to" required
+                                                        id="invoice-to" value="{{ $item->email }}"
+                                                        placeholder="custemer@email.com" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="invoice-subject" class="form-label">Subject</label>
+                                                    <input type="text" class="form-control" name="subject" required
+                                                        id="invoice-subject"
+                                                        value="Quotation of purchased Training License"
+                                                        placeholder="Quotation of purchased Training License" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="invoice-message" class="form-label">Message</label>
+                                                    <textarea class="form-control" name="message" required id="invoice-message" cols="3" rows="8">Dear {{ $item->name }}, Thank you for your business, always a pleasure to work with you! We have generated a new quotation</textarea>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <span class="badge bg-label-primary">
+                                                        <i class="ti ti-link ti-xs"></i>
+                                                        <span class="align-middle">Quotation Attached</span>
+                                                    </span>
+                                                </div>
+                                                <div class="mb-3 d-flex flex-wrap">
+                                                    <button type="submit" class="btn btn-primary me-3"
+                                                        data-bs-dismiss="offcanvas">Send</button>
+                                                    <button type="button" class="btn btn-label-secondary"
+                                                        data-bs-dismiss="offcanvas">Cancel</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- /Send Invoice Sidebar -->
                                 </td>
                             </tr>
                         @endforeach

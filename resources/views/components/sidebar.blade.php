@@ -115,6 +115,32 @@
                     <div data-i18n="Employees">Employees</div>
                 </a>
             </li>
+            <li class="menu-item {{ Request::routeIs('trainees.index') ? 'active' : '' }}">
+                <a href="{{ route('trainees.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-users"></i>
+                    <div data-i18n="Trainees">Trainees</div>
+                </a>
+            </li>
+
+            <li class="menu-item {{ Request::routeIs(['license-subscribers.index','training-subscribers.index']) ? 'open' : '' }}" style="">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-book"></i>
+                    <div data-i18n="Subscription">Subscription</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ Request::routeIs(['license-subscribers.index']) ? 'active' : '' }}">
+                        <a href="{{ route('license-subscribers.index') }}" class="menu-link">
+                            <div data-i18n="Licenses">Licenses</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ Request::routeIs(['training-subscribers.index']) ? 'active' : '' }}">
+                        <a href="{{ route('training-subscribers.index') }}" class="menu-link">
+                            <div data-i18n="Student Course">Student Course</div>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
 
             <li class="menu-item {{ Request::routeIs('setting.index') ? 'active' : '' }}">
                 <a href="{{ route('setting.index') }}" class="menu-link">

@@ -25,15 +25,6 @@ class InvoiceController extends Controller
         return view('invoices.index', compact('invoices'));
 
     }
-    public function index_tz()
-    {
-        //
-        $invoices = Invoice::where('branch', 'tanzania')->orderByDesc('id')->get();
-
-        return view('invoices-tz.index', compact('invoices'));
-
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -47,7 +38,7 @@ class InvoiceController extends Controller
     {
         $invoice = Quotation::findOrFail($id);
         $clients = Client::orderBy('name')->get();
-        return view('invoices.quotation', compact('clients','invoice'));
+        return view('invoices.quotation', compact('clients', 'invoice'));
 
     }
     public function trainings()
@@ -58,14 +49,6 @@ class InvoiceController extends Controller
     public function licenses()
     {
         return Licence::orderBy('name')->get();
-
-    }
-    public function create_tz()
-    {
-        //
-        $trainings = Course::all();
-        $licences = Licence::all();
-        return view('invoices-tz.create', compact('trainings', 'licences'));
 
     }
 
@@ -127,13 +110,15 @@ class InvoiceController extends Controller
 
         return view('invoices.show', compact('invoice'));
     }
-    public function show_tz(string $id)
+
+    public function download(string $id)
     {
         $invoice = Invoice::findorfail($id);
-
-        return view('invoices-tz.show', compact('invoice'));
+        $pdf = Pdf::loadView('invoices.invoice', compact('invoice'))->setPaper('a4', 'landscape');
+        return $pdf->download(time() . '.pdf');
+        // return view('invoices.invoice',compact('invoice'));
     }
-    public function download(string $id)
+    public function print(string $id)
     {
         $invoice = Invoice::findorfail($id);
         $pdf = Pdf::loadView('invoices.invoice', compact('invoice'))->setPaper('a4', 'landscape');
@@ -150,14 +135,6 @@ class InvoiceController extends Controller
         $clients = Client::orderBy('name')->get();
 
         return view('invoices.edit', compact('invoice', 'clients'));
-    }
-    public function edit_tz(string $id)
-    {
-        $invoice = Invoice::findorfail($id);
-        $trainings = Course::all();
-        $licences = Licence::all();
-
-        return view('invoices-tz.edit', compact('invoice', 'licences', 'trainings'));
     }
 
     /**

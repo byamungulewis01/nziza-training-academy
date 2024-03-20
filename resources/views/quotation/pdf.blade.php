@@ -10,6 +10,7 @@
             font-family: sans-serif;
             margin: 0;
             padding: 20px;
+            font-size: 13px;
         }
 
         header {
@@ -141,8 +142,10 @@
                 </tr>
             </table>
         </header>
-        <h3 style="background-color: #1c1717; color:#ffffff;">PREPARED FOR</h3>
-        <p>{{ $invoice->name }}<br>
+        <h3 style="padding : 1px;font-size : 13px; background-color: #1c1717; color:#ffffff; ">PREPARED FOR</h3>
+        <p>
+            {{ $invoice->name }}<br>
+            {{ $invoice->address }}<br>
             </p>
         @if ($invoice->training != null)
             @php
@@ -151,14 +154,14 @@
                 $count = count($trainings);
             @endphp
             <table border="1" style="width: 100%;">
-                <thead style="background-color: #1c1717; color:#ffffff;">
+                <thead style="font-size : 11px; background-color: #1c1717; color:#ffffff;">
                     <tr>
-                        <th colspan="2">S/N</th>
-                        <th colspan="2">CERTIFIED TRAINING PROGRAM</th>
-                        <th colspan="2">TIMING</th>
-                        <th colspan="2">QTY</th>
-                        <th colspan="2">UNIT PRICE</th>
-                        <th colspan="2">AMOUNT (USD)</th>
+                        <th>S/N</th>
+                        <th>CERTIFIED TRAINING PROGRAM</th>
+                        <th>TIMING</th>
+                        <th>QTY</th>
+                        <th>UNIT PRICE</th>
+                        <th>AMOUNT (USD)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -171,19 +174,19 @@
                             $totalTraining += $course->price;
                         @endphp
                         <tr>
-                            <td colspan="2">{{ $i + 1 }}</td>
-                            <td colspan="2">{{ $course->name }}</td>
-                            <td colspan="2">{{ $course->timing }} Hours</td>
-                            <td colspan="2">{{ $trainingsQty[$i] }}</td>
-                            <td colspan="2">${{ $course->price }}</td>
-                            <td colspan="2">${{ $course->price * $trainingsQty[$i] }}</td>
+                            <td>{{ $i + 1 }}</td>
+                            <td>{{ $course->name }}</td>
+                            <td>{{ $course->timing }} Hours</td>
+                            <td>{{ $trainingsQty[$i] }}</td>
+                            <td>${{ $course->price }}</td>
+                            <td>${{ $course->price * $trainingsQty[$i] }}</td>
                         </tr>
                     @endfor
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="4"></td>
-                        <td colspan="7"><strong>Total Amount</strong></td>
+                        <td><strong>Total Amount</strong></td>
                         <td>${{ $totalTraining }}</td>
                     </tr>
                 </tfoot>
@@ -197,14 +200,14 @@
                 $licensesQty = explode('_', $invoice->licence_qty);
                 $count = count($licenses);
             @endphp
-            <thead style="background-color: #1c1717; color:#ffffff;">
+            <thead style="font-size : 11px;background-color: #1c1717; color:#ffffff;">
                 <tr>
-                    <th colspan="2">S/N</th>
-                    <th colspan="2">SOFTWARE LICENSES</th>
-                    <th colspan="2">LICENSE TYPE</th>
-                    <th colspan="2">QTY</th>
-                    <th colspan="2">UNIT PRICE</th>
-                    <th colspan="2">AMOUNT (USD)</th>
+                    <th>S/N</th>
+                    <th>SOFTWARE LICENSES</th>
+                    <th>LICENSE TYPE</th>
+                    <th>QTY</th>
+                    <th>UNIT PRICE</th>
+                    <th>AMOUNT (USD)</th>
                 </tr>
             </thead>
             <tbody>
@@ -218,28 +221,32 @@
                         $totalLicense += $total;
                     @endphp
                     <tr>
-                        <td colspan="2">{{ $i + 1 }}</td>
-                        <td colspan="2">{{ $license->name }}</td>
-                        <td colspan="2">{{ $license->licence_type }}</td>
-                        <td colspan="2">{{ $licensesQty[$i] }}</td>
-                        <td colspan="2">${{ $license->price }}</td>
-                        <td colspan="2">${{ $total * $licensesQty[$i] }}</td>
+                        <td>{{ $i + 1 }}</td>
+                        <td>{{ $license->name }}</td>
+                        <td>{{ $license->licence_type }}</td>
+                        <td>{{ $licensesQty[$i] }}</td>
+                        <td>${{ $license->price }}</td>
+                        <td>${{ $total * $licensesQty[$i] }}</td>
                     </tr>
                 @endfor
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="5"></td>
-                    <td colspan="6"><strong>Total Amount</strong></td>
+                    <td colspan="4"></td>
+                    <td><strong>Total Amount</strong></td>
                     <td>$ {{ $totalLicense }}</td>
                 </tr>
             </tfoot>
         </table>
         @endif
         <br>
-        <h3 style="background-color: #1c1717; color:#ffffff;">COMMENT:</h3>
+        <h3 style="padding : 1px;font-size : 13px; background-color: #1c1717; color:#ffffff;">COMMENT:</h3>
         <p>{!! $invoice->comments !!}</p>
     </main>
+      <!-- Footer -->
+      <footer style="position: fixed; bottom: 20px; right: 20px;">
+       <span style="color: #4a4a4a"> Powered by Nziza MIS</span>
+    </footer>
 </body>
 
 </html>

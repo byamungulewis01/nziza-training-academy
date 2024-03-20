@@ -21,8 +21,19 @@
                                         <div>
                                             <p class="mb-0">Email</p>
                                             <h5 class="mb-0">
-                                                <a href="mailto:example@gmail.com"
-                                                    class="text-heading">example@gmail.com</a>
+                                                <span class="text-heading">sales@nzizatraining.ac.rw</span>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-xl-12">
+                                    <div class="d-flex align-items-center">
+                                        <div class="badge bg-label-success rounded p-2 me-2"><i
+                                                class="ti ti-phone ti-sm"></i></div>
+                                        <div>
+                                            <p class="mb-0">Phone</p>
+                                            <h5 class="mb-0">
+                                                <span class="text-heading">+250785568718</span>
                                             </h5>
                                         </div>
                                     </div>
@@ -49,6 +60,14 @@
                                         <i class="ti ti-ban ti-xs"></i>
                                     </span>
                                     {{ session()->get('error') }}
+                                </div>
+                            @endif
+                            @if (session()->has('warning1'))
+                                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                    <span class="alert-icon text-warning me-2">
+                                        <i class="ti ti-ban ti-xs"></i>
+                                    </span>
+                                    {{ session()->get('warning1') }}
                                 </div>
                             @endif
 
@@ -98,7 +117,6 @@
                                         <input required type="text" class="form-control" name="phone"
                                             value="{{ old('phone') }}" id="phone" placeholder="Phone Number" />
                                     </div>
-
                                     <div class="col-md-6">
                                         <label class="form-label fs-6" for="email">Work Email<span
                                                 class="text-danger">*</span></label>
@@ -106,120 +124,52 @@
                                             placeholder="email@gmail.com" name="email" id="email"
                                             value="{{ old('email') }}">
                                     </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-check custom-option custom-option-basic checked">
-                                            <label
-                                                class="form-check-label custom-option-content form-check-input-payment d-flex gap-3 align-items-center"
-                                                for="trainingCheck">
-                                                <input name="requestType" class="form-check-input" type="radio"
-                                                    value="training" id="trainingCheck" checked="">
-                                                <span class="custom-option-body">
-                                                    <img src="{{ asset('assets/img/nziza/train.png') }}"
-                                                        alt="visa-card" width="58"
-                                                        data-app-light-img="nziza/train.png"
-                                                        data-app-dark-img="nziza/train.png">
-                                                    <span class="ms-3">Training</span>
-                                                </span>
-                                            </label>
+                                    <hr class="my-3">
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label for="trainings" class="form-label fs-6">Select Training:</label>
+                                            <select id="trainings" class="form-select">
+                                                <option value="" selected disabled>Select Training</option>
+                                            </select>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-check custom-option custom-option-basic">
-                                            <label
-                                                class="form-check-label custom-option-content form-check-input-payment d-flex gap-3 align-items-center"
-                                                for="licenceCheck">
-                                                <input name="requestType" class="form-check-input" type="radio"
-                                                    value="licence" id="licenceCheck">
-                                                <span class="custom-option-body">
-                                                    <img src="{{ asset('assets/img/nziza/licence.png') }}"
-                                                        alt="paypal" width="58"
-                                                        data-app-light-img="nziza/licence.png"
-                                                        data-app-dark-img="nziza/licence.png">
-                                                    <span class="ms-3">Licence</span>
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12 trainingDiv">
-                                        <table id="item_table" style="width: 96%">
-                                            <tr>
-                                                <td>
-                                                    <div class="row mb-3">
-                                                        <div class="col-8">
-                                                            <label class="form-label fs-6" for="training">Training
-                                                                Name</label>
-
-                                                            <select name="training[]" class="form-select"
-                                                                id="training">
-                                                                <option value="" selected disabled>Select </option>
-                                                                @foreach ($trainings as $item)
-                                                                    <option value="{{ $item->id }}">
-                                                                        {{ $item->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <label class="form-label fs-6"
-                                                                for="contact-form-email">Trainees</label>
-
-                                                            <input value="" name="trainee_number[]" type="number"
-                                                                min="1" class="form-control">
-                                                        </div>
-                                                        <div class="col-1">
-                                                            <label class="form-label fs-6"
-                                                                for="contact-form-email"></label>
-
-                                                            <button type="button" class="btn btn-primary add"><i
-                                                                    class="ti ti-plus ti-xs"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                        <table id="trainingTable" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 65%">Training Name</th>
+                                                    <th>Qty</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Table body content will be added dynamically -->
+                                            </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-md-12 licenceDiv" style="display: none">
-                                        <table id="item_table2" style="width: 96%">
-                                            <tr>
-                                                <td>
-                                                    <div class="row mb-3">
-                                                        <div class="col-8">
-                                                            <label class="form-label fs-6" for="licence">Licence
-                                                                Name</label>
-
-                                                            <select name="licence[]" class="form-select"
-                                                                id="licence">
-                                                                <option value="" selected disabled>Select</option>
-                                                                @foreach ($licences as $item)
-                                                                    <option value="{{ $item->id }}">
-                                                                        {{ $item->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-3">
-                                                            <label class="form-label fs-6"
-                                                                for="trainee">Trainees</label>
-
-                                                            <input name="licence_number[]" type="number"
-                                                                id="trainee" min="1"
-                                                                class="form-control">
-                                                        </div>
-                                                        <div class="col-1">
-                                                            <label class="form-label fs-6"
-                                                                for="contact-form-email"></label>
-
-                                                            <button type="button" class="btn btn-primary add2"><i
-                                                                    class="ti ti-plus ti-xs"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                    <hr class="my-3 mx-n4">
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label for="licenses" class="form-label fs-6">Select License:</label>
+                                            <select id="licenses" class="form-select">
+                                                <option value="" selected disabled>Select License</option>
+                                            </select>
+                                        </div>
+                                        <table id="licenseTable" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 65%">License Name</th>
+                                                    <th>Qty</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Table body content will be added dynamically -->
+                                            </tbody>
                                         </table>
                                     </div>
 
                                     <div class="col-12">
                                         <label class="form-label fs-6" for="contact-form-message">Comment</label>
-                                        <textarea id="contact-form-message" name="comment" class="form-control" rows="8"
+                                        <textarea id="contact-form-message" name="comment" class="form-control" rows="3"
                                             placeholder="Write a comment here"></textarea>
                                     </div>
                                     <div class="col-12">
@@ -233,79 +183,96 @@
             </div>
         </div>
     </section>
+    @section('css')
+        <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    @endsection
     @section('js')
+        <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
         <script>
             $(document).ready(function() {
-
-                $(document).on('click', '.add', function() {
-                    var html = '';
-                    var number_of_rows = $('#item_table tr').length;
-
-                    html +=
-                        `<tr><td><div class="row mb-3">
-                    <div class="col-8">
-                    <select name="training[${number_of_rows}]" class="form-select" id="">
-                        <option value="" selected disabled>Select
-                        </option> @foreach ($trainings as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-
-                    </select></div>
-                  <div class="col-3"><input name="trainee_number[${number_of_rows}]" type="number" min="1" class="form-control">
-                                                        </div>
-                <div class="col-1"> <button class="btn btn-danger remove"><i class="ti ti-minus"></i></button></div></div></td></tr>`;
-                    $('#item_table').append(html);
-                });
-
-                $(document).on('click', '.remove', function() {
-                    $(this).closest('tr').remove();
-                });
-
+                $('.select2').select2();
             });
         </script>
         <script>
             $(document).ready(function() {
-
-                $(document).on('click', '.add2', function() {
-                    var html = '';
-                    var number_of_rows = $('#item_table2 tr').length;
-
-                    html +=
-                        `<tr><td><div class="row mb-3">
-                    <div class="col-8">
-                        <select name="licence[${number_of_rows}]" class="form-select"
-                            id="">
-                            <option value="" selected disabled>Select
-                            </option>
-                            @foreach ($licences as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-
-                        </select>
-                    </div>
-                  <div class="col-3"><input name="licence_number[${number_of_rows}]" type="number" min="1"
-                                                                value="1" class="form-control">
-                                                        </div>
-                <div class="col-1"> <button class="btn btn-danger remove2"><i class="ti ti-minus"></i></button></div></div></td></tr>`;
-                    $('#item_table2').append(html);
+                // Fetch trainings from backend
+                $.ajax({
+                    url: "{{ route('invoice.trainings') }}",
+                    method: 'GET',
+                    success: function(trainings) {
+                        // Populate dropdown list with product options
+                        trainings.forEach(training => {
+                            $('#trainings').append(
+                                `<option value="${training.id}">${training.name}</option>`);
+                        });
+                    }
                 });
 
-                $(document).on('click', '.remove2', function() {
+                // Handle product selection
+                $('#trainings').change(function() {
+                    var trainingId = $(this).val();
+                    var trainingName = $(this).find('option:selected').text();
+
+                    // Check if the product is already in the table
+                    if ($('#trainingTable tr[data-id="' + trainingId + '"]').length > 0) {
+                        alert('Training already added!');
+                        return;
+                    }
+
+                    // Add selected product to the table
+                    $('#trainingTable tbody').append(
+                        `<tr data-id="${trainingId}"><td>${trainingName} <input type="hidden" value="${trainingId}" name="training[]"/></td>
+                            <td><input name="training_qty[]" value="1" type="number" id="training_qty" min="1" class="form-control"></td>
+                            <td><button type="button" class="btn btn-danger removeBtn"><i class="ti ti-minus ti-xs"></i></button></td>
+                            </tr>`
+                    );
+                });
+
+                // Handle removing items from the table
+                $(document).on('click', '.removeBtn', function() {
                     $(this).closest('tr').remove();
                 });
+            });
+        </script>
+        <script>
+            $(document).ready(function() {
+                // Fetch licenses from backend
+                $.ajax({
+                    url: "{{ route('invoice.licenses') }}",
+                    method: 'GET',
+                    success: function(licenses) {
+                        // Populate dropdown list with product options
+                        licenses.forEach(license => {
+                            $('#licenses').append(
+                                `<option value="${license.id}">${license.name}</option>`);
+                        });
+                    }
+                });
 
-            });
-        </script>
-        <script>
-            $(document).on('click', '#trainingCheck', function() {
-                $(".trainingDiv").show();
-                $(".licenceDiv").hide();
-            });
-        </script>
-        <script>
-            $(document).on('click', '#licenceCheck', function() {
-                $(".trainingDiv").hide();
-                $(".licenceDiv").show();
+                // Handle product selection
+                $('#licenses').change(function() {
+                    var licenseId = $(this).val();
+                    var licenseName = $(this).find('option:selected').text();
+
+                    // Check if the product is already in the table
+                    if ($('#licenseTable tr[data-id="' + licenseId + '"]').length > 0) {
+                        alert('License already added!');
+                        return;
+                    }
+
+                    // Add selected product to the table
+                    $('#licenseTable tbody').append(
+                        `<tr data-id="${licenseId}"><td>${licenseName} <input type="hidden" value="${licenseId}" name="licence[]"/></td>
+                            <td><input name="licence_qty[]" value="1" type="number" id="licence_qty" min="1" class="form-control"></td>
+                            <td><button type="button" class="btn btn-danger removeBtn2"><i class="ti ti-minus ti-xs"></i></button></td>
+                            </tr>`
+                    );
+                });
+
+                // Handle removing items from the table
+                $(document).on('click', '.removeBtn2', function() {
+                    $(this).closest('tr').remove();
+                });
             });
         </script>
     @endsection

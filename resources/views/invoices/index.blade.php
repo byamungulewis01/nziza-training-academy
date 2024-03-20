@@ -27,7 +27,7 @@
                             <th>Address</th>
                             <th>Status</th>
                             <th>Issued Date</th>
-                            <th>Remeining</th>
+                            <th>Remaining</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -84,8 +84,10 @@
                                             <div class="dropdown-menu dropdown-menu-end"><a
                                                     href="{{ route('invoice.download', $item->id) }}"
                                                     class="dropdown-item">Download</a>
-                                                <a href="{{ route('invoice.edit', $item->id) }}"
-                                                    class="dropdown-item">Edit</a>
+                                                @if ($item->status == 0)
+                                                    <a href="{{ route('invoice.edit', $item->id) }}"
+                                                        class="dropdown-item">Edit</a>
+                                                @endif
                                                 <div class="dropdown-divider"></div>
 
                                                 <a href="#" data-bs-toggle="modal"
@@ -136,7 +138,7 @@
                                             <div class="mb-3">
                                                 <label for="invoice-from" class="form-label">From</label>
                                                 <input type="text" class="form-control" name="from" required
-                                                    id="invoice-from" value="sales@nzizatraining.ac.rw"
+                                                    id="invoice-from" value="{{ env('MAIL_FROM_ADDRESS') }}" readonly
                                                     placeholder="company@email.com" />
                                             </div>
                                             <div class="mb-3">
@@ -153,8 +155,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="invoice-message" class="form-label">Message</label>
-                                                <textarea class="form-control" name="message" required id="invoice-message" cols="3"
-                                                    rows="8">Dear {{ $item->client->name }}, Thank you for your business, always a pleasure to work with you! We have generated a new invoice , We would appreciate payment of this invoice by {{ $item->expired_date }}</textarea>
+                                                <textarea class="form-control" name="message" required id="invoice-message" cols="3" rows="8">Dear {{ $item->client->name }}, Thank you for your business, always a pleasure to work with you! We have generated a new invoice , We would appreciate payment of this invoice by {{ $item->expired_date }}</textarea>
                                             </div>
                                             <div class="mb-4">
                                                 <span class="badge bg-label-primary">
@@ -163,7 +164,7 @@
                                                 </span>
                                             </div>
                                             <div class="mb-3 d-flex flex-wrap">
-                                                <button class="btn btn-primary me-3"
+                                                <button type="submit" class="btn btn-primary me-3"
                                                     data-bs-dismiss="offcanvas">Send</button>
                                                 <button type="button" class="btn btn-label-secondary"
                                                     data-bs-dismiss="offcanvas">Cancel</button>

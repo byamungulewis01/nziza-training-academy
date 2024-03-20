@@ -6,9 +6,12 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DairlyReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LicenceController;
+use App\Http\Controllers\LicenseSubscriberController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TraineesController;
+use App\Http\Controllers\TrainingSubscriberController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,14 +57,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('invoice', InvoiceController::class);
     Route::resource('client', ClientController::class);
     Route::get('invoice/download/{id}', [InvoiceController::class, 'download'])->name('invoice.download');
+    Route::get('invoice/print/{id}', [InvoiceController::class, 'print'])->name('invoice.print');
     Route::post('invoice/send-invoice/{id}', [InvoiceController::class, 'send_invoice'])->name('invoice.send_invoice');
     Route::get('invoice/quotation-invoice/{id}', [InvoiceController::class, 'quotation_invoice'])->name('invoice.quotation_invoice');
-    Route::get('invoice-trainings', [InvoiceController::class, 'trainings'])->name('invoice.trainings');
-    Route::get('invoice-licenses', [InvoiceController::class, 'licenses'])->name('invoice.licenses');
-    Route::get('invoice-tz', [InvoiceController::class, 'index_tz'])->name('invoice.index_tz');
-    Route::get('invoice-tz/create', [InvoiceController::class, 'create_tz'])->name('invoice.create_tz');
-    Route::get('invoice-tz/{id}/edit', [InvoiceController::class, 'edit_tz'])->name('invoice.edit_tz');
-    Route::get('invoice-tz/{id}/show', [InvoiceController::class, 'show_tz'])->name('invoice.show_tz');
 
     Route::controller(RequestsController::class)->prefix('request')->name('request.')->group(function () {
         Route::get('/demostration', 'demostration')->name('demostration');
@@ -70,6 +68,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/quotation/edit/{id}', 'edit')->name('quotation.edit');
         Route::get('/quotation/show/{id}', 'show')->name('quotation.show');
         Route::get('/quotation/download/{id}', 'download')->name('quotation.download');
+        Route::post('/quotation/send-quotation/{id}', 'send_quotation')->name('quotation.send_quotation');
+        Route::get('/quotation/print/{id}', 'print')->name('quotation.print');
         Route::post('/quotation/invoice/{id}', 'make_invoice')->name('quotation.make_invoice');
         Route::put('/quotation/update/{id}', 'update')->name('quotation.update');
         Route::delete('/quotation/destroy/{id}', 'destroy')->name('quotation.destroy');
@@ -91,6 +91,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/quotation/destroy/{id}', 'destroy')->name('quotation.destroy');
         Route::get('/careers', 'careers')->name('careers');
     });
+
+    Route::resource('license-subscribers', LicenseSubscriberController::class);
+    Route::resource('training-subscribers', TrainingSubscriberController::class);
+    Route::resource('trainees', TraineesController::class);
 
 });
 

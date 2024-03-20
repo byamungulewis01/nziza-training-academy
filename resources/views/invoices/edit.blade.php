@@ -198,7 +198,7 @@
                             </div>
                             <div class="row px-0 px-sm-4">
                                 <div class="col-12">
-                                    <button class="btn btn-primary d-grid mb-2 waves-effect waves-light">
+                                    <button type="submit" class="btn btn-primary d-grid mb-2 waves-effect waves-light">
                                         <span class="d-flex align-items-center justify-content-center text-nowrap">Save
                                             Invoice</span>
                                     </button>
@@ -209,6 +209,29 @@
                     </div>
                 </div>
             </div>
+              <!-- Invoice Actions -->
+              <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                <div class="card">
+                    <div class="card-body">
+                        <button class="btn btn-primary d-grid w-100 mb-2 waves-effect waves-light"
+                            data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap"><i
+                                    class="ti ti-send ti-xs me-2"></i>Send Invoice</span>
+                        </button>
+                        <a href="{{ route('invoice.download', $invoice->id) }}" target="_blank"
+                            class="btn btn-label-success d-grid w-100 mb-2 waves-effect">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                                <i class="ti ti-download ti-xs me-2"></i> Download</span>
+                        </a>
+                        <a class="btn btn-label-danger d-grid w-100 mb-2 waves-effect" target="_blank"
+                            href="{{ route('invoice.print', $invoice->id) }}">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                                <i class="ti ti-printer ti-xs me-2"></i> Print</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Invoice Actions -->
         </div>
 
     </div>

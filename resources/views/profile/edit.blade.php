@@ -18,7 +18,7 @@
                         @method('patch')
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="../../assets/img/avatars/14.png" alt="user-avatar"
+                                <img src="{{ asset('assets/img/avatars/user.png') }}" alt="user-avatar"
                                     class="d-block w-px-100 h-px-100 rounded" id="uploadedAvatar">
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-3 waves-effect waves-light"
@@ -98,10 +98,7 @@
                             <input type="hidden">
                         </div>
                     </form>
-
-                    <!-- /Account -->
                 </div>
-
             </div>
             <div class="col-md-6">
 

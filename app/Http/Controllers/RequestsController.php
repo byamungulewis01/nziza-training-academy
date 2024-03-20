@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\QuotationEmail;
 use App\Models\Career;
 use App\Models\Course;
+use App\Models\Demostration;
 use App\Models\Licence;
 use App\Models\Quotation;
-use App\Models\Demostration;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RequestsController extends Controller
 {
@@ -35,8 +37,15 @@ class RequestsController extends Controller
     {
         $invoice = Quotation::findorfail($id);
         $pdf = Pdf::loadView('quotation.pdf', compact('invoice'))->setPaper('a4', 'landscape');
-        return $pdf->stream(time() . '.pdf');
+        return $pdf->download(time() . '.pdf');
         // return view('quotation.pdf',compact('invoice'));
+    }
+    public function print($id)
+    {
+        $invoice = Quotation::findorfail($id);
+        $pdf = Pdf::loadView('quotation.pdf', compact('invoice'))->setPaper('a4', 'landscape');
+        return $pdf->stream(time() . '.pdf');
+        // return view('quotation.pdf', compact('invoice'));
     }
     public function show($id)
     {
@@ -112,6 +121,9 @@ class RequestsController extends Controller
             'company_name' => 'required',
             'comments' => 'nullable',
         ]);
+        if (!$request->has('training') && !$request->has('licence')) {
+            return back()->with('warning1', 'You can not continue with no selection');
+        }
 
         $request->merge([
             'name' => $request->fname . ' ' . $request->lname,
@@ -133,7 +145,7 @@ class RequestsController extends Controller
 
         try {
             Quotation::create($request->all());
-            return back()->with('message', 'Quotation sent succesfully');
+            return back()->with('success', 'Quotation sent succesfully');
         } catch (\Throwable $th) {
             //throw $th;
             // dd($th->getMessage());
@@ -198,5 +210,22 @@ class RequestsController extends Controller
             // dd($th->getMessage());
             return back()->with('error', $th->getMessage());
         }
+    }
+    public function send_quotation(Request $request, string $id)
+    {
+        $invoice = Quotation::findorfail($id);
+        $pdf = Pdf::loadView('quotation.pdf', compact('invoice'))->setPaper('a4', 'landscape');
+        $pdfContent = $pdf->output();
+
+        try {
+            Mail::to($request->to)->send(new QuotationEmail($pdfContent, $request->subject, $request->message, $request->from));
+        } catch (\Throwable $th) {
+
+            return back()->with('error', 'Something went wrong try again');
+
+        }
+        // dd($request->all(), $invoice);
+
+        return back()->with('message', 'Invoice Sent successfully');
     }
 }

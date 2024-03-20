@@ -86,8 +86,8 @@
                                             data-bs-target="#editUser{{ $item->id }}"><i
                                                 class="ti ti-edit ti-sm me-2"></i></a>
                                         <a href="javascript:;" data-bs-toggle="modal"
-                                        data-bs-target="#deleteUser{{ $item->id }}" class="text-body delete-record"><i
-                                                class="ti ti-trash ti-sm mx-2"></i></a>
+                                            data-bs-target="#deleteUser{{ $item->id }}"
+                                            class="text-body delete-record"><i class="ti ti-trash ti-sm mx-2"></i></a>
 
                                     </div>
                                     <!-- Update User Modal -->
@@ -152,7 +152,7 @@
                                                                 @foreach ($branches as $branch)
                                                                     </option>
                                                                     <option
-                                                                        @if (old('branch_id', $item->branch_id) ==  $branch->id) selected @endif
+                                                                        @if (old('branch_id', $item->branch_id) == $branch->id) selected @endif
                                                                         value="{{ $branch->id }}">
                                                                         {{ $branch->name }}</option>
                                                                 @endforeach
@@ -210,14 +210,14 @@
                                         </div>
                                     </div>
                                     <!--/ Update User Modal -->
-                                      <!-- Delete User Modal -->
-                                      <div class="modal fade" id="deleteUser{{ $item->id }}"
-                                        tabindex="-1" aria-hidden="true">
+                                    <!-- Delete User Modal -->
+                                    <div class="modal fade" id="deleteUser{{ $item->id }}" tabindex="-1"
+                                        aria-hidden="true">
                                         <div class="modal-dialog modal-sm modal-simple">
                                             <div class="modal-content">
                                                 <div class="modal-body">
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                     <div class="text-center mb-4">
                                                         <h5 class="mb-2">Are you sure you want to delete
                                                             this?</h5>
@@ -542,7 +542,7 @@
         <script>
             $(document).ready(function() {
                 $('.datatables').DataTable({
-                order : []
+                    order: []
                 });
             });
         </script>

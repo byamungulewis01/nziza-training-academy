@@ -115,6 +115,13 @@
   <script src="{{ asset('assets/toast/js/jquery.toast.js') }}"></script>
 
   @include('layouts.flash_message')
+  <script>
+      $(document).ready(function() {
+          $("form").submit(function(event) {
+              $(this).find("button[type=submit]").prop("disabled", true);
+          });
+      });
+  </script>
 
   @yield('js')
 

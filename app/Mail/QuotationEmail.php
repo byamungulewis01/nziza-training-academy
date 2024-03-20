@@ -3,12 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class InvoiceEmail extends Mailable
+class QuotationEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,7 +34,7 @@ class InvoiceEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->subject,
+            subject: 'Quotation Email',
         );
     }
 
@@ -56,10 +57,9 @@ class InvoiceEmail extends Mailable
     {
         return [];
     }
-
     public function build()
     {
-        return $this->markdown('emails.send_invoice')
-            ->subject($this->subject)->attachData($this->pdf, 'invoice.pdf')->from($this->from_email, env('APP_NAME'));
+        return $this->markdown('emails.send_quotation')
+            ->subject($this->subject)->attachData($this->pdf, 'quotation.pdf')->from($this->from_email, env('APP_NAME'));
     }
 }

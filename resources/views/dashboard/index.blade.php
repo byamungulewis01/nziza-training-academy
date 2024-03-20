@@ -11,7 +11,7 @@
                                 <h5 class="card-title mb-0">Welcome, {{ auth()->user()->name }}!</h5>
                                 <p class="mb-2">Todays reminder</p>
                                 <h4 class="text-primary mb-1">0</h4>
-                                <a href="javascript:;" class="btn btn-primary">View Profile</a>
+                                <a href="{{ route('profile.edit') }}" class="btn btn-primary">View Profile</a>
                             </div>
                         </div>
 

@@ -166,7 +166,7 @@
                             </div>
                             <div class="row px-0 px-sm-4">
                                 <div class="col-12">
-                                    <button class="btn btn-primary d-grid mb-2 waves-effect waves-light">
+                                    <button type="submit" class="btn btn-primary d-grid mb-2 waves-effect waves-light">
                                         <span class="d-flex align-items-center justify-content-center text-nowrap">Save
                                             Invoice</span>
                                     </button>

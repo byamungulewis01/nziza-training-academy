@@ -20,20 +20,20 @@
                             @endif
                             <h4>Update Quotation</h4>
                             @php
-                                $name = explode(' ',$quote->name);
+                                $name = explode(' ', $quote->name);
                             @endphp
                             <div class="row m-sm-4 m-2">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fs-6" for="fname">First Name <span
                                             class="text-danger">*</span></label>
-                                    <input required type="text" name="fname" value="{{ $name[0]  }}"
+                                    <input required type="text" name="fname" value="{{ $name[0] }}"
                                         class="form-control" id="fname" placeholder="First Name" />
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fs-6" for="lname">Last Name<span
                                             class="text-danger">*</span></label>
                                     <input required type="text" id="lname" name="lname"
-                                        value="{{ $name[1]  }}" class="form-control" placeholder="Last Name" />
+                                        value="{{ $name[1] }}" class="form-control" placeholder="Last Name" />
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fs-6" for="company_name">Campany Name<span
@@ -172,6 +172,29 @@
                     </div>
                 </div>
             </div>
+            <!-- Invoice Actions -->
+            <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+                <div class="card">
+                    <div class="card-body">
+                        <button class="btn btn-primary d-grid w-100 mb-2 waves-effect waves-light"
+                            data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap"><i
+                                    class="ti ti-send ti-xs me-2"></i>Send Invoice</span>
+                        </button>
+                        <a href="{{ route('request.quotation.download', $quote->id) }}" target="_blank"
+                            class="btn btn-label-success d-grid w-100 mb-2 waves-effect">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                            <i class="ti ti-download ti-xs me-2"></i> Download</span>
+                        </a>
+                        <a class="btn btn-label-danger d-grid w-100 mb-2 waves-effect" target="_blank"
+                            href="{{ route('request.quotation.print', $quote->id) }}">
+                            <span class="d-flex align-items-center justify-content-center text-nowrap">
+                                <i class="ti ti-printer ti-xs me-2"></i> Print</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- /Invoice Actions -->
         </div>
 
     </div>

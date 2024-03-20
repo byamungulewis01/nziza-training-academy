@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{ $invoice->invoice_no }}</title>
     <style>
         body {
             font-family: sans-serif;
             margin: 0;
             padding: 20px;
+            font-size: 13px;
+
         }
 
         header {
@@ -106,6 +109,17 @@
             width: 10%;
         }
 
+        footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+            font-size: 10px;
+            color: #888;
+            /* Adjust color as needed */
+        }
+
+
         @media print {
             body {
                 margin: 0;
@@ -148,7 +162,8 @@
                 </tr>
             </table>
         </header>
-        <h3 style="background-color: #1c1717; color:#ffffff;">PREPARED FOR</h3>
+        <h3 style="padding : 1px;font-size : 13px; background-color: #1c1717; color:#ffffff; ">PREPARED FOR</h3>
+
         <p>{{ $invoice->client->name }}<br>
             {{ $invoice->client->address }}</p>
         @if ($invoice->training != null)
@@ -159,15 +174,15 @@
                 $count = count($trainings);
             @endphp
             <table border="1" style="width: 100%;">
-                <thead style="background-color: #1c1717; color:#ffffff;">
+                <thead style="font-size : 11px; background-color: #1c1717; color:#ffffff;">
                     <tr>
-                        <th colspan="2">S/N</th>
-                        <th colspan="2">CERTIFIED TRAINING PROGRAM</th>
-                        <th colspan="2">TIMING</th>
-                        <th colspan="2">QTY</th>
-                        <th colspan="2">UNIT PRICE</th>
-                        <th colspan="2">DISCOUNT</th>
-                        <th colspan="2">AMOUNT (USD)</th>
+                        <th>S/N</th>
+                        <th>CERTIFIED TRAINING PROGRAM</th>
+                        <th>TIMING</th>
+                        <th>QTY</th>
+                        <th>UNIT PRICE</th>
+                        <th>DISCOUNT</th>
+                        <th>AMOUNT (USD)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -182,20 +197,20 @@
                             $totalTraining += $total - $disount;
                         @endphp
                         <tr>
-                            <td colspan="2">{{ $i + 1 }}</td>
-                            <td colspan="2">{{ $course->name }}</td>
-                            <td colspan="2">{{ $course->timing }} Hours</td>
-                            <td colspan="2">{{ $trainingsQty[$i] }}</td>
-                            <td colspan="2">${{ $course->price }}</td>
-                            <td colspan="2">{{ $trainingsDiscount[$i] }} %</td>
-                            <td colspan="2">${{ $total - $disount }}</td>
+                            <td>{{ $i + 1 }}</td>
+                            <td>{{ $course->name }}</td>
+                            <td>{{ $course->timing }} Hours</td>
+                            <td>{{ $trainingsQty[$i] }}</td>
+                            <td>${{ $course->price }}</td>
+                            <td>{{ $trainingsDiscount[$i] }} %</td>
+                            <td>${{ $total - $disount }}</td>
                         </tr>
                     @endfor
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="4"></td>
-                        <td colspan="8"><strong>Total Amount</strong></td>
+                        <td colspan="5"></td>
+                        <td><strong>Sub Total</strong></td>
                         <td>${{ $totalTraining }}</td>
                     </tr>
                 </tfoot>
@@ -210,15 +225,15 @@
                     $licensesDiscount = explode('_', $invoice->licence_discount);
                     $count = count($licenses);
                 @endphp
-                <thead style="background-color: #1c1717; color:#ffffff;">
+                <thead style="font-size : 11px;background-color: #1c1717; color:#ffffff;">
                     <tr>
-                        <th colspan="2">S/N</th>
-                        <th colspan="2">SOFTWARE LICENSES</th>
-                        <th colspan="2">LICENSE TYPE</th>
-                        <th colspan="2">QTY</th>
-                        <th colspan="2">UNIT PRICE</th>
-                        <th colspan="2">DISCOUNT</th>
-                        <th colspan="2">AMOUNT (USD)</th>
+                        <th>S/N</th>
+                        <th>SOFTWARE LICENSES</th>
+                        <th>LICENSE TYPE</th>
+                        <th>QTY</th>
+                        <th>UNIT PRICE</th>
+                        <th>DISCOUNT</th>
+                        <th>AMOUNT (USD)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -233,20 +248,20 @@
                             $totalLicense += $total - $disount;
                         @endphp
                         <tr>
-                            <td colspan="2">{{ $i + 1 }}</td>
-                            <td colspan="2">{{ $license->name }}</td>
-                            <td colspan="2">{{ $license->licence_type }}</td>
-                            <td colspan="2">{{ $licensesQty[$i] }}</td>
-                            <td colspan="2">${{ $license->price }}</td>
-                            <td colspan="2">{{ $licensesDiscount[$i] }} %</td>
-                            <td colspan="2">${{ $total - $disount }}</td>
+                            <td>{{ $i + 1 }}</td>
+                            <td>{{ $license->name }}</td>
+                            <td>{{ $license->licence_type }}</td>
+                            <td>{{ $licensesQty[$i] }}</td>
+                            <td>${{ $license->price }}</td>
+                            <td>{{ $licensesDiscount[$i] }} %</td>
+                            <td>${{ $total - $disount }}</td>
                         </tr>
                     @endfor
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="5"></td>
-                        <td colspan="8"><strong>Total Amount</strong></td>
+                        <td><strong>Sub Total</strong></td>
                         <td>$ {{ $totalLicense }}</td>
                     </tr>
                 </tfoot>
@@ -257,14 +272,18 @@
                 $subtotal = @$totalLicense + @$totalTraining;
                 $vat_perc = $subtotal * 0.18;
             @endphp
-            <p class="mb-1">Subtotal : <strong>$ {{ $subtotal }}</strong></p>
+            <p class="mb-1">Total : <strong>$ {{ $subtotal }}</strong></p>
             <p class="mb-1">Tax VAT(18%): <strong>$ {{ $vat_perc }}</strong></p>
-            <p class="mb-1">Total : <strong>$ {{ $subtotal + $vat_perc }}</strong></p>
+            <p class="mb-1">Grand Total : <strong>$ {{ $subtotal + $vat_perc }}</strong></p>
         </div>
         <br>
-        <h3 style="background-color: #1c1717; color:#ffffff;">USEFULL NOTES:</h3>
+        <h3 style="padding : 1px;background-color: #1c1717; color:#ffffff;">USEFULL NOTES:</h3>
         <p>{!! $invoice->notes !!}</p>
     </main>
+    <footer style="position: fixed; bottom: 20px; right: 20px;">
+        <span style="color: #4a4a4a"> Powered by Nziza MIS</span>
+     </footer>
+
 </body>
 
 </html>

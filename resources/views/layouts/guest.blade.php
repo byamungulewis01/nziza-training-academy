@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/formvalidation/dist/css/formValidation.min.css') }}" />
 
     <!-- Page CSS -->
+    @yield('css')
     <!-- Page -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/page-auth.css') }}">
     <!-- Helpers -->
@@ -105,7 +106,13 @@
 
   <!-- Page JS -->
   <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
-
+  <script>
+      $(document).ready(function() {
+          $("form").submit(function(event) {
+              $(this).find("button[type=submit]").prop("disabled", true);
+          });
+      });
+  </script>
 </body>
 
 
