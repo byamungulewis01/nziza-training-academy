@@ -1,19 +1,21 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CourseController;
-use App\Http\Controllers\DairlyReportController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LicenceController;
-use App\Http\Controllers\LicenseSubscriberController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\RequestsController;
 use App\Http\Controllers\TraineesController;
+use App\Http\Controllers\DairlyReportController;
+use App\Http\Controllers\EmployeeProfileController;
+use App\Http\Controllers\LicenseSubscriberController;
 use App\Http\Controllers\TrainingSubscriberController;
-use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::post('invoice/send-invoice/{id}', [InvoiceController::class, 'send_invoice'])->name('invoice.send_invoice');
     Route::get('invoice/quotation-invoice/{id}', [InvoiceController::class, 'quotation_invoice'])->name('invoice.quotation_invoice');
 
+    Route::controller(EmployeeProfileController::class)->prefix('employee')->name('employee.')->group(function () {
+        Route::get('/profile/{id}', 'profile')->name('profile');
+        Route::get('/reports/{id}', 'reports')->name('reports');
+    });
     Route::controller(RequestsController::class)->prefix('request')->name('request.')->group(function () {
         Route::get('/demostration', 'demostration')->name('demostration');
         Route::get('/quotation', 'quotation')->name('quotation');
@@ -77,7 +83,6 @@ Route::middleware('auth')->group(function () {
     });
     Route::controller(DairlyReportController::class)->prefix('dairly-report')->name('dairly_report.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::post('/', 'report')->name('report');
     });
 
     Route::controller(RequestsController::class)->prefix('request')->name('request.')->group(function () {
@@ -95,6 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('license-subscribers', LicenseSubscriberController::class);
     Route::resource('training-subscribers', TrainingSubscriberController::class);
     Route::resource('trainees', TraineesController::class);
+    Route::resource('roles', RolesController::class);
 
 });
 

@@ -15,4 +15,9 @@ class CourseSubscriber extends Model
         'end_date',
         'status',
     ];
+
+    public function trainee()
+    {
+        return $this->belongsTo(Trainee::class);
+    }
 }

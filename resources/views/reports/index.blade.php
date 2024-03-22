@@ -3,68 +3,9 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <!-- Users List Table -->
         <div class="card">
-            {{-- <div class="card-header border-bottom"> --}}
-            {{-- <h5 class="card-title mb-0">Dairly Report --}}
-            {{-- <a class="btn btn-dark text-white pull-left float-end" data-bs-toggle="modal"
-                        data-bs-target="#addModel"><i class="ti ti-plus me-0 me-sm-1 ti-xs"></i><span
-                            class="d-none d-sm-inline-block">ToDay</span></a> --}}
-            {{-- </h5> --}}
-            <!-- New User Modal -->
-            {{-- <div class="modal fade" id="addModel" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
-                        <div class="modal-content p-3 p-md-5">
-                            <div class="modal-body">
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                                <div class="text-center mb-">
-                                    <h3 class="mb-2"><span class="text-warning">{{ now()->format('l') }}</span>'s
-                                        report</h3>
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            <p><strong>Opps Something went wrong</strong></p>
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>* {{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                </div>
-                                <form action="{{ route('dairly_report.report') }}" class="row g-3" method="post">
-                                    @csrf
-                                    <div class="col-12">
-                                        <div class="mb-4">
-                                            <label for="beforenoon" class="form-label fw-bold">BEFORENOON:</label>
-                                            <div class="editor-beforenoon" style="height: 200px;max-height: 200px;">
-                                                {!! @$report->beforenoon !!}</div>
-                                            <input type="hidden" name="beforenoon" id="beforenoon">
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-4">
-                                            <label for="afternoon" class="form-label fw-bold">AFTERNOON:</label>
-                                            <div class="editor-afternoon" style="height: 200px;max-height: 200px;">
-                                                {!! @$report->afternoon !!}</div>
-                                            <input type="hidden" name="afternoon" id="afternoon">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 text-center">
-                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
-                                        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal"
-                                            aria-label="Close">Cancel</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-            <!--/ New User Modal -->
-            {{-- </div> --}}
             <div class="card-body">
                 <!-- FullCalendar -->
                 <div id="calendar"></div>
-
             </div>
         </div>
         <!-- Send Invoice Sidebar -->
@@ -75,52 +16,86 @@
                     aria-label="Close"></button>
             </div>
             <div class="offcanvas-body pt-0 flex-grow-1">
-                <form class="event-form pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eventForm" onsubmit="return false" novalidate="novalidate" data-select2-id="eventForm">
+                <form class="event-form pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eventForm"
+                    novalidate="novalidate" data-select2-id="eventForm">
                     <div class="mb-3 fv-plugins-icon-container">
-                      <label class="form-label" for="eventTitle">Title</label>
-                      <input type="text" class="form-control" id="eventTitle" name="eventTitle" placeholder="Title">
-                    <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div></div>
-                    <div class="mb-3" data-select2-id="25">
-                      <label class="form-label" for="eventLabel">Label Color</label>
-                      <div class="position-relative" data-select2-id="24"><select class="select2 select-event-label form-select select2-hidden-accessible" id="eventLabel" name="eventLabel" data-select2-id="eventLabel" tabindex="-1" aria-hidden="true">
-                        <option data-label="primary" value="Business" selected="" data-select2-id="2">Blue</option>
-                        <option data-label="danger" value="Personal" data-select2-id="26">Red</option>
-                        <option data-label="warning" value="Family" data-select2-id="27">Green</option>
-                      </select><span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="1" style="width: 335.2px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-eventLabel-container"><span class="select2-selection__rendered" id="select2-eventLabel-container" role="textbox" aria-readonly="true" title="Business"><span class="badge badge-dot bg-primary me-2"> </span>Blue</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span></div>
+                        <label class="form-label" for="title">Title</label>
+                        <input type="hidden" name="reported_by" value="{{ auth()->user()->id }}">
+                        <input type="text" class="form-control" id="title" required name="title"
+                            placeholder="Title">
+                        <span id="titleError" class="text-danger"></span>
                     </div>
+
                     <div class="mb-3">
-                      <label class="form-label" for="eventDescription">Description</label>
-                      <textarea class="form-control" rows="6" name="eventDescription" id="eventDescription"></textarea>
+                        <label class="form-label" for="description">Description</label>
+                        <textarea class="form-control" rows="10" required name="description" id="description"></textarea>
+                        <span id="descriptionError" class="text-danger"></span>
                     </div>
                     <div class="mb-3 d-flex justify-content-sm-between justify-content-start my-4">
-                      <div>
-                        <button type="submit" class="btn btn-primary btn-add-event me-sm-3 me-1 waves-effect waves-light">Add</button>
-                        <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1 waves-effect" data-bs-dismiss="offcanvas">Cancel</button>
-                      </div>
-                      <div><button class="btn btn-label-danger btn-delete-event d-none waves-effect">Delete</button></div>
+                        <div>
+                            <button
+                                class="btn btn-primary btn-add-event me-sm-3 me-1 waves-effect waves-light">Add</button>
+                            <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1 waves-effect"
+                                data-bs-dismiss="offcanvas">Cancel</button>
+                        </div>
+                        <div><button class="btn btn-label-danger btn-delete-event d-none waves-effect">Delete</button>
+                        </div>
                     </div>
-                  <input type="hidden"></form>
+                    <input type="hidden">
+                </form>
+            </div>
+        </div>
+        <!-- /Send Invoice Sidebar -->
+        <!-- Send Invoice Sidebar -->
+        <div class="offcanvas offcanvas-end" id="updateReport" aria-hidden="true">
+            <div class="offcanvas-header my-1">
+                <h5 class="offcanvas-title">Update Report</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body pt-0 flex-grow-1">
+                <form class="event-form pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eventFormUpdate"
+                    novalidate="novalidate" data-select2-id="eventFormUpdate">
+                    <div class="mb-3 fv-plugins-icon-container">
+                        <label class="form-label" for="titleUpdate">Title</label>
+                        <input type="hidden" name="id" id="id">
+                        <input type="text" class="form-control" id="titleUpdate" required name="title"
+                            placeholder="Title">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="descriptionUpdate">Description</label>
+                        <textarea class="form-control" rows="10" required name="description" id="descriptionUpdate"></textarea>
+                    </div>
+
+                    <div id="updateButtons" class="mb-3 d-flex justify-content-sm-between justify-content-start my-4">
+                        <div>
+                            <button class="btn btn-primary btn-add-event me-sm-3 me-1 waves-effect waves-light">Save
+                                Changes</button>
+                            <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1 waves-effect"
+                                data-bs-dismiss="offcanvas">Cancel</button>
+                        </div>
+                        <div>
+                            <button type="button"
+                                class="btn btn-label-danger btn-delete-event d-block waves-effect">Delete</button>
+                        </div>
+                    </div>
+                    <input type="hidden">
+                </form>
             </div>
         </div>
         <!-- /Send Invoice Sidebar -->
     </div>
     @section('css')
         <!-- Page JS -->
-
-
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />
-        {{-- <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/typography.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/katex.css') }}" />
-        <link rel="stylesheet" href="{{ asset('assets/vendor/libs/quill/editor.css') }}" /> --}}
-
     @endsection
 
     @section('js')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        {{-- <script src="{{ asset('assets/vendor/libs/quill/katex.js') }}"></script>
-        <script src="{{ asset('assets/vendor/libs/quill/quill.js') }}"></script> --}}
+
         <script>
             $('#calendar').fullCalendar({
                 header: {
@@ -128,17 +103,181 @@
                     center: 'title',
                     right: 'month, agendaWeek, agendaDay',
                 },
+                events: @json($events),
                 selectable: true,
                 selectHelper: true,
+
+                eventRender: function(event, element) {
+                    element.css({
+                        color: 'white',
+                        fontSize: '15px'
+                    }); // Set text color to white
+                    // element.find('.fc-title').append('<br/><span class="fc-time">' + moment(event.start).format('LT') + ' - ' + moment(event.end).format('LT') + '</span>');
+                },
                 select: function(start, end, allDays) {
+                    if (!start.isSame(moment(), 'day')) {
+                        // If not the current date, do not select
+                        $('#calendar').fullCalendar('unselect');
+                        Swal.fire({
+                            title: "Warning!",
+                            text: "Sorry make report to current date only.",
+                            icon: "warning"
+                        });
+                        return false;
+                    }
+                    //  else if (start.isoWeekday() === 6 || start.isoWeekday() === 7) {
+                    //     // If it's a weekend, do not select
+                    //     $('#calendar').fullCalendar('unselect');
+                    //     return false;
+                    // }
+
                     new bootstrap.Offcanvas($('#makeReport')).show();
-                    // Swal.fire({
-                    //     title: "Good job!",
-                    //     text: "You clicked the button!",
-                    //     icon: "success"
-                    // });
+                    $('#eventForm').submit(function(e) {
+                        e.preventDefault(); // Prevent the default form submission
+
+                        // Get form data
+                        var formData = $(this).serializeArray();
+                        console.log(formData);
+                        // AJAX request to send form data to Laravel backend
+                        $.ajax({
+                            url: "{{ route('dairly_report.report') }}", // Replace this with your Laravel backend route
+                            type: 'POST',
+                            data: formData,
+                            success: function(response) {
+                                $('#calendar').fullCalendar('renderEvent', {
+                                    'title': response.title,
+                                    'start': response.start,
+                                    'description': response.description,
+                                    'end': response.end,
+                                    'color': response.color
+                                });
+                                $('#makeReport').offcanvas('hide');
+                                // Optionally, display a success message
+                                Swal.fire({
+                                    title: "Success!",
+                                    text: "Report created successfully.",
+                                    icon: "success"
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.log(error);
+                                $('#makeReport').offcanvas('hide');
+                                console.error(error);
+                                // Optionally, display an error message
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: "An error occurred while creating the report.",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    });
+
+                },
+                eventClick: function(event) {
+                    // Open Offcanvas with data to update
+                    new bootstrap.Offcanvas($('#updateReport')).show();
+                    if (!event.start.isSame(moment(), 'day')) {
+                        $('#updateButtons').addClass('d-none').removeClass('d-block');
+                    } else {
+                        $('#updateButtons').addClass('d-block').removeClass('d-none');
+                    }
+
+                    $('#titleUpdate').val(event.title);
+                    $('#id').val(event.id);
+                    $('#descriptionUpdate').val(event.description);
+                    $('#eventFormUpdate').submit(function(e) {
+                        e.preventDefault(); // Prevent the default form submission
+
+                        // Get form data
+                        var formData = $(this).serializeArray();
+                        // AJAX request to send form data to Laravel backend
+
+                        $.ajax({
+                            url: "{{ route('dairly_report.report_update') }}", // Replace this with your Laravel backend route
+                            type: "PATCH",
+                            data: formData,
+                            success: function(response) {
+                                $('#calendar').fullCalendar('removeEvents', event.id);
+
+                                $('#calendar').fullCalendar('renderEvent', {
+                                    'title': response.title,
+                                    'description': response.description,
+                                    'start': response.start,
+                                    'end': response.end,
+                                    'color': response.color
+                                });
+                                $('#updateReport').offcanvas('hide');
+                                // Optionally, display a success message
+                                Swal.fire({
+                                    title: "Success!",
+                                    text: "Report updated successfully.",
+                                    icon: "success"
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error response
+                                $('#updateReport').offcanvas('hide');
+
+                                console.error(error);
+                                // Optionally, display an error message
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: "An error occurred while updatinng the report.",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    });
                 },
             });
+        </script>
+        <script>
+            // Add click event listener to the delete button
+            $('.btn-delete-event').click(function(event) {
+                $('#updateReport').offcanvas('hide');
+                // Display confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var eventId = $('#id').val();
+
+                        var route = "{{ route('dairly_report.report_destroy', ['id' => ':id']) }}";
+                        route = route.replace(':id', eventId);
+                        $.ajax({
+                            url: route, // Replace this with your Laravel backend route
+                            type: "DELETE",
+                            success: function(response) {
+
+                                $('#calendar').fullCalendar('removeEvents', response);
+                                Swal.fire({
+                                    title: "Success!",
+                                    text: "Report deleted successfully.",
+                                    icon: "success"
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(error);
+                                // Optionally, display an error message
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: "An error occurred while updatinng the report.",
+                                    icon: "error"
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Function to handle deletion of the event
         </script>
         {{-- <script>
             var quill = new Quill(".editor-beforenoon", {

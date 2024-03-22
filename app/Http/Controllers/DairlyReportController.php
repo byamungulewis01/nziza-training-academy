@@ -10,32 +10,66 @@ class DairlyReportController extends Controller
     //
     public function index()
     {
-        $report = DairlyReport::where('reported_by', auth()->user()->id)->whereDate('created_at', now())->first();
-        return view('reports.index', compact('report'));
+        $events = array();
+        $reports = DairlyReport::all();
+
+        foreach ($reports as $report) {
+
+            $events[] = [
+                'id' => $report->id,
+                'title' => $report->title,
+                'description' => $report->description,
+                'start' => $report->created_at,
+                'end' => $report->created_at,
+            ];
+        }
+        return view('reports.index', compact('events'));
     }
     public function report(Request $request)
     {
-        $request->merge(['reported_by' => auth()->user()->id]);
-        try {
-            $report = DairlyReport::where('reported_by', auth()->user()->id)
-                ->whereDate('created_at', now())
-                ->first();
+        $request->validate([
+            'reported_by' => 'required',
+            'title' => 'required|string',
+            'description' => 'required',
+        ]);
 
-            if ($report) {
-                if ($request->beforenoon == null) {
-                    $request->merge(['beforenoon' => $report->beforenoon]);
-                }
-                if ($request->afternoon == null) {
-                    $request->merge(['afternoon' => $report->afternoon]);
-                }
-                $report->update($request->all());
-            } else {
-                DairlyReport::create($request->all());
-            }
-            return back()->with('message', 'Reported Succesfully');
-
-        } catch (\Throwable $e) {
-            return back()->with('error', 'An error occurred while processing your request.');
+        $report = DairlyReport::create($request->all());
+        if ($report) {
+            return response()->json([
+                'id' => $report->id,
+                'start' => $report->created_at,
+                'end' => $report->created_at,
+                'title' => $report->title,
+                'description' => $report->description,
+                'color' => '#924ACE',
+            ]);
         }
+
+    }
+    public function report_update(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'required',
+        ]);
+
+        $report = DairlyReport::find($request->id);
+        $report->update($request->all());
+        return response()->json([
+            'id' => $report->id,
+            'start' => $report->created_at,
+            'end' => $report->created_at,
+            'title' => $report->title,
+            'description' => $report->description,
+            'color' => '#324ACE',
+        ]);
+
+    }
+    public function report_destroy($id)
+    {
+
+         DairlyReport::find($id)->delete();
+
+        return $id;
     }
 }

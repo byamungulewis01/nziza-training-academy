@@ -9,8 +9,8 @@ class DairlyReport extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'beforenoon',
-        'afternoon',
+        'title',
+        'description',
         'reported_by',
         'comment',
         'commented_at',

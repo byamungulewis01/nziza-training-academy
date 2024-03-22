@@ -15,15 +15,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\User::factory(10)->create();
-        $this->call([BranchSeeder::class,]);
-        \App\Models\User::factory()->create([
-            'name' => 'BYAMUNGU Lewis',
-            'email' => 'byamungulewis@gmail.com',
-            'phone' => '0785436135',
-            'position' => 'IT Engineer',
-            'password' => 'byamungu',
-            'role' => 'super_admin',
-            'branch_id' => Branch::first()->id
-        ]);
+        // $this->call([
+        //     RolesAndPermissionSeeder::class,
+        // ]);
+        // $this->call([BranchSeeder::class,]);
+        // \App\Models\User::factory()->create([
+        //     'name' => 'BYAMUNGU Lewis',
+        //     'email' => 'byamungulewis@gmail.com',
+        //     'phone' => '0785436135',
+        //     'position' => 'IT Engineer',
+        //     'password' => 'byamungu',
+        //     'role' => 'super_admin',
+        //     'branch_id' => Branch::first()->id
+        // ]);
     }
 }

@@ -66,6 +66,7 @@
                 </ul>
             </li>
 
+
             <li class="menu-item {{ Request::routeIs(['invoice.index', 'invoice.create', 'invoice.quotation_invoice', 'invoice.edit', 'invoice.show']) ? 'open' : '' }}"
                 style="">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -88,12 +89,24 @@
                 </ul>
             </li>
 
-
-            <li class="menu-item {{ Request::routeIs('client.index') ? 'active' : '' }}">
-                <a href="{{ route('client.index') }}" class="menu-link">
-                    <i class="menu-icon tf-icons ti ti-user"></i>
-                    <div data-i18n="Clients">Clients</div>
+            <li class="menu-item {{ Request::routeIs(['client.index', 'trainees.index']) ? 'open' : '' }}"
+                style="">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-users"></i>
+                    <div data-i18n="Customers">Customers</div>
                 </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ Request::routeIs('client.index') ? 'active' : '' }}">
+                        <a href="{{ route('client.index') }}" class="menu-link">
+                            <div data-i18n="Clients">Clients</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ Request::routeIs('trainees.index') ? 'active' : '' }}">
+                        <a href="{{ route('trainees.index') }}" class="menu-link">
+                            <div data-i18n="Trainees">Trainees</div>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <li class="menu-item {{ Request::routeIs('course.index') ? 'active' : '' }}">
@@ -115,14 +128,9 @@
                     <div data-i18n="Employees">Employees</div>
                 </a>
             </li>
-            <li class="menu-item {{ Request::routeIs('trainees.index') ? 'active' : '' }}">
-                <a href="{{ route('trainees.index') }}" class="menu-link">
-                    <i class="menu-icon tf-icons ti ti-users"></i>
-                    <div data-i18n="Trainees">Trainees</div>
-                </a>
-            </li>
 
-            <li class="menu-item {{ Request::routeIs(['license-subscribers.index','training-subscribers.index']) ? 'open' : '' }}" style="">
+            <li class="menu-item {{ Request::routeIs(['license-subscribers.index', 'training-subscribers.index']) ? 'open' : '' }}"
+                style="">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-book"></i>
                     <div data-i18n="Subscription">Subscription</div>
@@ -141,13 +149,33 @@
 
                 </ul>
             </li>
+            <li class="menu-item {{ Request::routeIs(['setting.index', 'roles.index']) ? 'open' : '' }}"
+                style="">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons ti ti-settings"></i>
+                    <div data-i18n="Settings">Settings</div>
+                </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ Request::routeIs('roles.index') ? 'active' : '' }}">
+                        <a href="{{ route('roles.index') }}" class="menu-link">
+                            <div data-i18n="Roles & Permissions">Roles & Permissions</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ Request::routeIs('setting.index') ? 'active' : '' }}">
+                        <a href="{{ route('setting.index') }}" class="menu-link">
+                            <div data-i18n="App Setup">App Setup</div>
+                        </a>
+                    </li>
 
-            <li class="menu-item {{ Request::routeIs('setting.index') ? 'active' : '' }}">
+                </ul>
+            </li>
+
+            {{-- <li class="menu-item {{ Request::routeIs('setting.index') ? 'active' : '' }}">
                 <a href="{{ route('setting.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-settings"></i>
                     <div data-i18n="Settings">Settings</div>
                 </a>
-            </li>
+            </li> --}}
         @endif
 
 

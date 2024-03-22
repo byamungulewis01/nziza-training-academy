@@ -82,6 +82,8 @@
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">
+                                        <a href="{{ route('employee.profile',$item->id) }}" class="text-body"><i
+                                                class="ti ti-eye ti-sm me-2"></i></a>
                                         <a href="javascript:;" class="text-body" data-bs-toggle="modal"
                                             data-bs-target="#editUser{{ $item->id }}"><i
                                                 class="ti ti-edit ti-sm me-2"></i></a>

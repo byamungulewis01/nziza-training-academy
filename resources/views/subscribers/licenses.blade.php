@@ -253,7 +253,7 @@
                     e = (e && e.flatpickr({
                         mode: "range",
                         minDate: "today"
-                    }), window.Helpers.initCustomOptionCheck(), document.querySelector("#wizard-create-deal"));
+                    }), window.Helpers.initCustomOptionCheck());
             }();
         </script>
 
