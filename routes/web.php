@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MonthlyGoalsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RolesController;
@@ -66,6 +67,8 @@ Route::middleware('auth')->group(function () {
     Route::controller(EmployeeProfileController::class)->prefix('employee')->name('employee.')->group(function () {
         Route::get('/profile/{id}', 'profile')->name('profile');
         Route::get('/reports/{id}', 'reports')->name('reports');
+        Route::get('/monthly-reports/{id}', 'monthly_reports')->name('monthly_reports');
+        Route::get('/monthly-reports/review/{id}/{goal}', 'monthly_reports_review')->name('monthly_reports_review');
     });
     Route::controller(RequestsController::class)->prefix('request')->name('request.')->group(function () {
         Route::get('/demostration', 'demostration')->name('demostration');
@@ -84,6 +87,10 @@ Route::middleware('auth')->group(function () {
     Route::controller(DairlyReportController::class)->prefix('dairly-report')->name('dairly_report.')->group(function () {
         Route::get('/', 'index')->name('index');
     });
+
+    Route::resource('monthly_goals', MonthlyGoalsController::class);
+    Route::put('monthly_goals/update_revenues/{id}', [MonthlyGoalsController::class, 'update_revenues'])->name('monthly_goals.update_revenues');
+
 
     Route::controller(RequestsController::class)->prefix('request')->name('request.')->group(function () {
         Route::get('/demostration', 'demostration')->name('demostration');

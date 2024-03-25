@@ -67,6 +67,10 @@
                         <label class="form-label" for="descriptionUpdate">Description</label>
                         <textarea class="form-control" rows="10" required name="description" id="descriptionUpdate"></textarea>
                     </div>
+                    <div id="commentArea" class="mb-3">
+                        <label class="form-label" for="commentArea">Comment</label>
+                        <textarea class="form-control" rows="5" id="comments"></textarea>
+                    </div>
 
                     <div id="updateButtons" class="mb-3 d-flex justify-content-sm-between justify-content-start my-4">
                         <div>
@@ -94,7 +98,6 @@
     @section('js')
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>
             $('#calendar').fullCalendar({
@@ -125,11 +128,11 @@
                         });
                         return false;
                     }
-                    //  else if (start.isoWeekday() === 6 || start.isoWeekday() === 7) {
-                    //     // If it's a weekend, do not select
-                    //     $('#calendar').fullCalendar('unselect');
-                    //     return false;
-                    // }
+                     else if (start.isoWeekday() === 6 || start.isoWeekday() === 7) {
+                        // If it's a weekend, do not select
+                        $('#calendar').fullCalendar('unselect');
+                        return false;
+                    }
 
                     new bootstrap.Offcanvas($('#makeReport')).show();
                     $('#eventForm').submit(function(e) {
@@ -176,16 +179,23 @@
                 },
                 eventClick: function(event) {
                     // Open Offcanvas with data to update
+             
                     new bootstrap.Offcanvas($('#updateReport')).show();
                     if (!event.start.isSame(moment(), 'day')) {
                         $('#updateButtons').addClass('d-none').removeClass('d-block');
                     } else {
                         $('#updateButtons').addClass('d-block').removeClass('d-none');
                     }
+                    if (event.comment === null) {
+                        $('#commentArea').addClass('d-none').removeClass('d-block');
+                    } else {
+                        $('#commentArea').addClass('d-block').removeClass('d-none');
+                    }
 
                     $('#titleUpdate').val(event.title);
                     $('#id').val(event.id);
                     $('#descriptionUpdate').val(event.description);
+                    $('#comments').val(event.comment);
                     $('#eventFormUpdate').submit(function(e) {
                         e.preventDefault(); // Prevent the default form submission
 

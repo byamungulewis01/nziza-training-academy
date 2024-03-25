@@ -19,8 +19,10 @@ class DairlyReportController extends Controller
                 'id' => $report->id,
                 'title' => $report->title,
                 'description' => $report->description,
+                'comment' => $report->comment,
                 'start' => $report->created_at,
                 'end' => $report->created_at,
+                'color' => ($report->comment) ? '#fc0000' : ''
             ];
         }
         return view('reports.index', compact('events'));
@@ -62,6 +64,24 @@ class DairlyReportController extends Controller
             'title' => $report->title,
             'description' => $report->description,
             'color' => '#324ACE',
+        ]);
+
+    }
+    public function report_comment(Request $request)
+    {
+        $request->validate([
+            'commented_by' => 'required',
+            'comment' => 'required',
+        ]);
+        $report = DairlyReport::find($request->id);
+        $report->update($request->all());
+        return response()->json([
+            'id' => $report->id,
+            'start' => $report->created_at,
+            'end' => $report->created_at,
+            'title' => $report->title,
+            'description' => $report->description,
+            'color' => '#fc0000',
         ]);
 
     }

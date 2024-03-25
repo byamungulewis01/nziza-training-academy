@@ -26,6 +26,7 @@ Route::get('invoice-licenses', [InvoiceController::class, 'licenses'])->name('in
 Route::controller(DairlyReportController::class)->prefix('dairly-report')->name('dairly_report.')->group(function () {
     Route::post('/', 'report')->name('report');
     Route::patch('/update', 'report_update')->name('report_update');
+    Route::patch('/comment', 'report_comment')->name('report_comment');
     Route::delete('/destroy/{id}', 'report_destroy')->name('report_destroy');
 
 });

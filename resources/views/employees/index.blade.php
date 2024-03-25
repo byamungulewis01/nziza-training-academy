@@ -62,7 +62,7 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column"><a href="javascript:"
+                                        <div class="d-flex flex-column"><a href="{{ route('employee.profile',$item->id) }}"
                                                 class="text-body text-truncate"><span
                                                     class="fw-medium">{{ $item->name }}</span></a><small
                                                 class="text-muted">{{ $item->email }}</small></div>

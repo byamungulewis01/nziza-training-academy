@@ -1,8 +1,7 @@
 @section('title', 'Employee Reports')
 <x-app-layout>
     <div class="container-xxl flex-grow-1 container-p-y">
-
-
+     
         @include('employees.navigation')
 
         <!-- User Profile Content -->
@@ -15,6 +14,48 @@
             </div>
         </div>
         <!--/ User Profile Content -->
+
+        <!-- Send Invoice Sidebar -->
+        <div class="offcanvas offcanvas-end" id="updateReport" aria-hidden="true">
+            <div class="offcanvas-header my-1">
+                <h5 class="offcanvas-title">{{ explode(' ', auth()->user()->name)[1] }}'s Report</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body pt-0 flex-grow-1">
+                <form class="event-form pt-0 fv-plugins-bootstrap5 fv-plugins-framework" id="eventFormUpdate"
+                    novalidate="novalidate" data-select2-id="eventFormUpdate">
+                    <div class="mb-3 fv-plugins-icon-container">
+                        <label class="form-label" for="titleUpdate">Title</label>
+                        <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="commented_by" value="{{ auth()->user()->id }}">
+                        <input type="text" class="form-control" id="titleUpdate" disabled name="title"
+                            placeholder="Title">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="descriptionUpdate">Description</label>
+                        <textarea class="form-control" rows="10" disabled name="description" id="descriptionUpdate"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-danger" for="comment">Add Comment</label>
+                        <textarea class="form-control border border-danger" rows="5" required name="comment" id="comment"></textarea>
+                    </div>
+
+                    <div class="mb-3 d-flex justify-content-sm-between justify-content-start my-4">
+                        <div>
+                            <button class="btn btn-primary btn-add-event me-sm-3 me-1 waves-effect waves-light">Save
+                                Changes</button>
+                            <button type="reset" class="btn btn-label-secondary btn-cancel me-sm-0 me-1 waves-effect"
+                                data-bs-dismiss="offcanvas">Cancel</button>
+                        </div>
+
+                    </div>
+                    <input type="hidden">
+                </form>
+            </div>
+        </div>
+        <!-- /Send Invoice Sidebar -->
 
     </div>
     @section('css')
@@ -45,66 +86,7 @@
                     }); // Set text color to white
                     // element.find('.fc-title').append('<br/><span class="fc-time">' + moment(event.start).format('LT') + ' - ' + moment(event.end).format('LT') + '</span>');
                 },
-                select: function(start, end, allDays) {
-                    if (!start.isSame(moment(), 'day')) {
-                        // If not the current date, do not select
-                        $('#calendar').fullCalendar('unselect');
-                        Swal.fire({
-                            title: "Warning!",
-                            text: "Sorry make report to current date only.",
-                            icon: "warning"
-                        });
-                        return false;
-                    }
-                    //  else if (start.isoWeekday() === 6 || start.isoWeekday() === 7) {
-                    //     // If it's a weekend, do not select
-                    //     $('#calendar').fullCalendar('unselect');
-                    //     return false;
-                    // }
 
-                    new bootstrap.Offcanvas($('#makeReport')).show();
-                    $('#eventForm').submit(function(e) {
-                        e.preventDefault(); // Prevent the default form submission
-
-                        // Get form data
-                        var formData = $(this).serializeArray();
-                        console.log(formData);
-                        // AJAX request to send form data to Laravel backend
-                        $.ajax({
-                            url: "{{ route('dairly_report.report') }}", // Replace this with your Laravel backend route
-                            type: 'POST',
-                            data: formData,
-                            success: function(response) {
-                                $('#calendar').fullCalendar('renderEvent', {
-                                    'title': response.title,
-                                    'start': response.start,
-                                    'description': response.description,
-                                    'end': response.end,
-                                    'color': response.color
-                                });
-                                $('#makeReport').offcanvas('hide');
-                                // Optionally, display a success message
-                                Swal.fire({
-                                    title: "Success!",
-                                    text: "Report created successfully.",
-                                    icon: "success"
-                                });
-                            },
-                            error: function(xhr, status, error) {
-                                console.log(error);
-                                $('#makeReport').offcanvas('hide');
-                                console.error(error);
-                                // Optionally, display an error message
-                                Swal.fire({
-                                    title: "Error!",
-                                    text: "An error occurred while creating the report.",
-                                    icon: "error"
-                                });
-                            }
-                        });
-                    });
-
-                },
                 eventClick: function(event) {
                     // Open Offcanvas with data to update
                     new bootstrap.Offcanvas($('#updateReport')).show();
@@ -125,7 +107,7 @@
                         // AJAX request to send form data to Laravel backend
 
                         $.ajax({
-                            url: "{{ route('dairly_report.report_update') }}", // Replace this with your Laravel backend route
+                            url: "{{ route('dairly_report.report_comment') }}", // Replace this with your Laravel backend route
                             type: "PATCH",
                             data: formData,
                             success: function(response) {

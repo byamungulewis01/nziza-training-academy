@@ -27,12 +27,26 @@
             </a>
         </li>
         @if (auth()->user()->role == 'employee')
-            <li class="menu-item {{ Request::routeIs('dairly_report.index') ? 'active' : '' }}">
-                <a href="{{ route('dairly_report.index') }}" class="menu-link">
+            <li class="menu-item {{ Request::routeIs(['dairly_report.index','monthly_goals.index','monthly_goals.create','monthly_goals.edit','monthly_goals.show']) ? 'open' : '' }}" style="">
+                <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons ti ti-calendar"></i>
                     <div data-i18n="Reporting">Reporting</div>
                 </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ Request::routeIs('dairly_report.index') ? 'active' : '' }}">
+                        <a href="{{ route('dairly_report.index') }}" class="menu-link">
+                            <div data-i18n="Dairly">Dairly</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ Request::routeIs(['monthly_goals.index','monthly_goals.create','monthly_goals.edit','monthly_goals.show']) ? 'active' : '' }}">
+                        <a href="{{ route('monthly_goals.index') }}" class="menu-link">
+                            <div data-i18n="Monthly">Monthly</div>
+                        </a>
+                    </li>
+
+                </ul>
             </li>
+
             <li class="menu-item">
                 <a href="#" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-square"></i>

@@ -122,6 +122,30 @@
           });
       });
   </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        @php
+            $currentDate = now();
+            $lastDayOfMonth = now()->endOfMonth();
+            $remainingDays = $currentDate->diffInDays($lastDayOfMonth);
+            $nextMonth = now()->addMonth()->firstOfMonth()->format('Y-m-d');
+            $reported = App\Models\MonthlyGoal::where('month',$nextMonth)->where('user_id' ,auth()->user()->id)->first();
+        @endphp
+         @if ($remainingDays <= 4 && !$reported)
+            @unless (Request::routeIs(['monthly_goals.index', 'monthly_goals.create', 'monthly_goals.edit', 'monthly_goals.show']))
+                <script>
+                    Swal.fire({
+                        title: "<strong>Monthly Report</strong>",
+                        icon: "info",
+                        html: `You have to submit your monthly Goals before ending of this Month ,
+                                    <a href="{{ route('monthly_goals.create') }}"> Click here to submit</a>`,
+                        showCloseButton: true,
+                        focusConfirm: false,
+                        confirmButtonText: `<i class="fa fa-thumbs-up"></i> Great!`,
+                        confirmButtonAriaLabel: "Thumbs up, great!",
+                    });
+                </script>
+            @endunless
+        @endif
 
   @yield('js')
 
